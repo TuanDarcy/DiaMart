@@ -52,13 +52,11 @@ The initial UI phase is storefront planning only.
 
 ## Out Of Scope For The Current Backend Phase
 
-- Supabase Storage integration.
 - Real payment processing.
 - Payment provider integration.
 - Real checkout processing.
 - Real Discord ticket integration.
 - Real support bot backend.
-- Admin dashboard implementation.
 - Staff or contributor dashboard implementation.
 - Live website chat backend.
 
@@ -153,10 +151,12 @@ This is future scope only and should not be implemented during the initial UI ph
 
 - Storefront routes now read primary catalog data from Supabase tables through a service layer in `src/services`.
 - A Supabase migration now defines storefront games, categories, products, FAQs, and support topics.
+- Admin dashboard is now available at `/admin` with protected login and CRUD operations for storefront catalog data.
+- Supabase Storage image upload is available for admins, while direct image URL input remains supported.
 - Decorative proof-of-delivery popups remain synthetic sample data for UI polish.
 - Cart and checkout still run in preview mode, and payment flow is not active yet.
 - Generated database types are still placeholders and need regeneration from Supabase after applying migrations.
-- No real payment backend, delivery-proof backend, support bot backend, or admin dashboard exists.
+- No real payment backend, delivery-proof backend, or support bot backend exists.
 
 The UI uses English copy, USD pricing, and keeps checkout and decorative social proof in clearly marked preview behavior.
 
