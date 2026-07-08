@@ -1,7 +1,6 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
-import { requireAdminSession } from "./admin-auth-service";
 
 export type AdminGame = {
   id: string;
@@ -69,6 +68,7 @@ export type AdminDashboardData = {
   products: AdminProduct[];
   faqs: AdminFaq[];
   supportTopics: AdminSupportTopic[];
+  loadError?: string;
   summary: {
     totalGames: number;
     totalCategories: number;
@@ -81,8 +81,6 @@ export type AdminDashboardData = {
 };
 
 export async function getAdminDashboardData(): Promise<AdminDashboardData> {
-  await requireAdminSession();
-
   const supabase = await createClient();
   const [
     gamesResult,
@@ -117,20 +115,23 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       .order("sort_order", { ascending: true }),
   ]);
 
-  if (gamesResult.error) {
-    throw gamesResult.error;
-  }
-  if (categoriesResult.error) {
-    throw categoriesResult.error;
-  }
-  if (productsResult.error) {
-    throw productsResult.error;
-  }
-  if (faqsResult.error) {
-    throw faqsResult.error;
-  }
-  if (supportResult.error) {
-    throw supportResult.error;
+  const errors = [
+    gamesResult.error,
+    categoriesResult.error,
+    productsResult.error,
+    faqsResult.error,
+    supportResult.error,
+  ].filter(Boolean);
+
+  const loadError =
+    errors.length > 0
+      ? `Admin data query error: ${errors
+          .map((error) => (error ? error.message : "unknown"))
+          .join(" | ")}`
+      : undefined;
+
+  if (loadError) {
+    console.error("[admin-dashboard-service]", loadError);
   }
 
   const games = (gamesResult.data ?? []) as AdminGame[];
@@ -145,6 +146,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
     products,
     faqs,
     supportTopics,
+    loadError,
     summary: {
       totalGames: games.length,
       totalCategories: categories.length,

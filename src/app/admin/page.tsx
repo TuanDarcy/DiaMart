@@ -11,14 +11,10 @@ export default async function AdminDashboardRoute({
     uploadedUrl?: string;
   }>;
 }) {
-  const sessionPromise = requireAdminSession();
-  const dataPromise = getAdminDashboardData();
-  const paramsPromise = searchParams;
-
-  const [session, data, params] = await Promise.all([
-    sessionPromise,
-    dataPromise,
-    paramsPromise,
+  const session = await requireAdminSession();
+  const [data, params] = await Promise.all([
+    getAdminDashboardData(),
+    searchParams,
   ]);
 
   return (

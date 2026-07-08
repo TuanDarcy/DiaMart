@@ -150,6 +150,12 @@ export function AdminDashboardPage({
           </div>
         ) : null}
 
+        {data.loadError ? (
+          <div className="rounded-[14px] border border-red-400/40 bg-red-400/10 p-3 text-sm text-red-100">
+            Dashboard loaded with partial data. {data.loadError}
+          </div>
+        ) : null}
+
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <SummaryCard label="Games" value={data.summary.totalGames} />
           <SummaryCard
