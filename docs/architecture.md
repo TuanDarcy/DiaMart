@@ -9,6 +9,7 @@ DiaMart sử dụng Next.js App Router, triển khai dự kiến trên Vercel, l
 - Client Component: chỉ dùng khi cần state, event handler hoặc browser API.
 - Service layer: đặt data access hoặc business service trong `src/services` thay vì query trực tiếp trong UI component.
 - Supabase: cung cấp Supabase Auth, Supabase PostgreSQL và Supabase Storage khi có nhu cầu.
+- Admin dashboard: route `/admin` cho vận hành catalog (games, categories, products, FAQs, support topics) và upload ảnh.
 - Environment variables: cấu hình public Supabase nằm trong `.env.local` ở local hoặc Vercel environment settings.
 
 ## System Flow
@@ -19,6 +20,7 @@ flowchart LR
     GitHub[GitHub Repository]
     Vercel[Vercel]
     Browser[User Browser]
+    AdminBrowser[Admin Browser]
     NextApp[Next.js Application]
     SupabaseAuth[Supabase Auth]
     SupabaseDB[(Supabase PostgreSQL)]
@@ -28,10 +30,11 @@ flowchart LR
     GitHub -->|Deployment Integration| Vercel
     Vercel --> NextApp
     Browser --> NextApp
+    AdminBrowser --> NextApp
 
     NextApp --> SupabaseAuth
     NextApp --> SupabaseDB
-    NextApp -. Optional .-> SupabaseStorage
+    NextApp --> SupabaseStorage
 ```
 
 ## Code Structure
@@ -65,5 +68,5 @@ flowchart TD
 
 - Chưa có module kinh doanh.
 - Chưa có API bên ngoài.
-- Chưa xác định cách phân quyền.
+- Phân quyền admin dựa trên `admin_users` + RLS `is_admin()`.
 - Sơ đồ phải được cập nhật khi luồng hệ thống thay đổi.

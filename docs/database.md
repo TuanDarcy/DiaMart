@@ -7,6 +7,8 @@
 
 Migration: `supabase/migrations/20260708101500_create_storefront_catalog.sql`
 
+Migration: `supabase/migrations/20260708120000_admin_access_and_storage.sql`
+
 ### `public.storefront_games`
 
 - Mục tiêu: danh sách game hiển thị trên home và game picker.
@@ -42,6 +44,20 @@ Migration: `supabase/migrations/20260708101500_create_storefront_catalog.sql`
 - Mục tiêu: data cho support widget.
 - Cột chính: `id`, `label`, `description`, `response`, `is_active`, `sort_order`.
 
+### `public.admin_users`
+
+- Mục tiêu: quản lý danh sách user được phép truy cập admin dashboard.
+- Cột chính: `user_id`, `email`, `role`, `is_active`.
+- Quan hệ:
+  - `user_id -> auth.users.id`
+- Ràng buộc dữ liệu:
+  - `role in ('admin', 'editor')`
+
+## Admin helper function
+
+- Function: `public.is_admin(check_user uuid default auth.uid())`
+- Mục tiêu: dùng trong RLS policy để kiểm tra quyền admin cho CRUD catalog và upload ảnh.
+
 ## Indexes
 
 - `storefront_games_slug_idx`
@@ -61,6 +77,25 @@ Các bảng storefront đã bật RLS và có policy read-only cho `anon` và `a
 
 Mỗi policy đều giới hạn bằng `is_active = true`.
 
+Các bảng storefront có thêm policy CRUD cho admin (`authenticated` + `public.is_admin(auth.uid())`) cho `insert`, `update`, `delete`.
+
+`public.admin_users` có policy:
+
+- Users can read their own admin status
+
+## Supabase Storage
+
+- Bucket: `storefront-images` (public)
+- Giới hạn kích thước file: 5MB
+- Mime types: `image/png`, `image/jpeg`, `image/webp`, `image/gif`
+
+Storage policies:
+
+- Public can read storefront images
+- Admin can upload storefront images
+- Admin can update storefront images
+- Admin can delete storefront images
+
 ## Seed data
 
 Migration tạo dữ liệu khởi tạo cho:
@@ -75,6 +110,7 @@ Migration tạo dữ liệu khởi tạo cho:
 
 - UI hiện lấy catalog data từ Supabase service layer.
 - Delivery proof popup vẫn dùng sample data để làm hiệu ứng hiển thị.
+- Admin dashboard đã hỗ trợ upload ảnh vào Supabase Storage và lưu URL vào `image_src`.
 - Cần regenerate `src/types/database.types.ts` từ Supabase sau khi migration được áp dụng vào môi trường chính.
 
 ## Checklist khi thay đổi database
