@@ -1,5 +1,5 @@
-import { AuthPage } from "@/features/auth/auth-page";
+import { redirect } from "next/navigation";
 
 export default function LoginPage() {
-  return <AuthPage mode="login" />;
+  redirect("/admin/login");
 }
