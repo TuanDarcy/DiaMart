@@ -50,11 +50,8 @@ The initial UI phase is storefront planning only.
 - Use local neutral placeholders or original project placeholders for images.
 - Keep image rendering compatible with remote URLs later.
 
-## Out Of Scope For The Initial UI Phase
+## Out Of Scope For The Current Backend Phase
 
-- Supabase connection for storefront data.
-- Database schema creation.
-- Supabase migrations.
 - Supabase Storage integration.
 - Real payment processing.
 - Payment provider integration.
@@ -154,14 +151,14 @@ This is future scope only and should not be implemented during the initial UI ph
 
 ## Current Application State
 
-- The initial storefront UI is implemented with local mock data.
-- The home page presents a Grow a Garden 2 storefront preview.
-- A preview cart page exists at `/cart`.
-- Supabase helper files exist, but no storefront data is connected.
-- Generated database types are placeholders.
-- No real checkout, payment, delivery proof backend, support backend, or admin dashboard exists.
+- Storefront routes now read primary catalog data from Supabase tables through a service layer in `src/services`.
+- A Supabase migration now defines storefront games, categories, products, FAQs, and support topics.
+- Decorative proof-of-delivery popups remain synthetic sample data for UI polish.
+- Cart and checkout still run in preview mode, and payment flow is not active yet.
+- Generated database types are still placeholders and need regeneration from Supabase after applying migrations.
+- No real payment backend, delivery-proof backend, support bot backend, or admin dashboard exists.
 
-The implemented UI uses English user-facing copy and keeps checkout, proof, and support integrations in clearly marked preview/mock states.
+The UI uses English copy, USD pricing, and keeps checkout and decorative social proof in clearly marked preview behavior.
 
 ## Documentation References
 

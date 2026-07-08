@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { siteConfig } from "@/config/site";
-import {
-  bestSellerProducts,
-  faqs,
-  games,
-  products,
-  sampleDeliveryProofs,
-  supportTopics,
-  trendingProducts,
-} from "./mock-data";
+import type {
+  FAQItem,
+  StorefrontGame,
+  StorefrontProduct,
+  SupportTopic,
+} from "./types";
+import { sampleDeliveryProofs } from "./mock-data";
 import { AuthPrompt } from "./components/auth-prompt";
 import { DeliveryProofPopup } from "./components/delivery-proof-popup";
 import { GameCarousel } from "./components/game-carousel";
@@ -20,7 +18,23 @@ import { SiteFooter } from "./components/site-footer";
 import { SiteHeader } from "./components/site-header";
 import { SupportWidget } from "./components/support-widget";
 
-export function HomePage() {
+type HomePageProps = {
+  games: StorefrontGame[];
+  products: StorefrontProduct[];
+  bestSellerProducts: StorefrontProduct[];
+  trendingProducts: StorefrontProduct[];
+  faqs: FAQItem[];
+  supportTopics: SupportTopic[];
+};
+
+export function HomePage({
+  games,
+  products,
+  bestSellerProducts,
+  trendingProducts,
+  faqs,
+  supportTopics,
+}: HomePageProps) {
   const [isAuthPromptOpen, setIsAuthPromptOpen] = useState(false);
 
   return (
@@ -121,7 +135,7 @@ export function HomePage() {
         <TrustSection />
         <HowItWorks />
         <DeliveryProofSection />
-        <FAQSection />
+        <FAQSection faqs={faqs} />
         <SupportEntry />
       </main>
 
@@ -346,7 +360,7 @@ function DeliveryProofSection() {
   );
 }
 
-function FAQSection() {
+function FAQSection({ faqs }: { faqs: FAQItem[] }) {
   return (
     <section
       className="container-shell section-gap"
