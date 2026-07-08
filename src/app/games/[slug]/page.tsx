@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
 import { GamePageClient } from "@/features/storefront/game-page-client";
 import {
-  games,
-  getCategoriesByGame,
-  getGameBySlug,
-  getProductsByGame,
-} from "@/features/storefront/mock-data";
+  getGameStorefrontData,
+  getStorefrontGames,
+} from "@/services/storefront/storefront-service";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const games = await getStorefrontGames();
   return games.map((game) => ({ slug: game.slug }));
 }
 
@@ -17,17 +16,18 @@ export default async function GameStorePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const game = getGameBySlug(slug);
+  const gameData = await getGameStorefrontData(slug);
 
-  if (!game) {
+  if (!gameData) {
     notFound();
   }
 
   return (
     <GamePageClient
-      game={game}
-      categories={getCategoriesByGame(slug)}
-      products={getProductsByGame(slug)}
+      game={gameData.game}
+      categories={gameData.categories}
+      products={gameData.products}
+      supportTopics={gameData.supportTopics}
     />
   );
 }

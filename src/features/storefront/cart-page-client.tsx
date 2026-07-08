@@ -4,18 +4,24 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { formatUsd } from "@/lib/utils/format-money";
 import { readStoredCart, writeStoredCart } from "./cart-storage";
-import { products } from "./mock-data";
-import type { CartLineItem } from "./types";
+import type { CartLineItem, StorefrontProduct } from "./types";
 import { getCartItemCount, getCartSubtotal } from "./components/cart-drawer";
 
-export function CartPageClient() {
+type CartPageClientProps = {
+  products: StorefrontProduct[];
+};
+
+export function CartPageClient({ products }: CartPageClientProps) {
   const [items, setItems] = useState<CartLineItem[]>(() => readStoredCart());
 
   useEffect(() => {
     writeStoredCart(items);
   }, [items]);
 
-  const subtotal = useMemo(() => getCartSubtotal(items, products), [items]);
+  const subtotal = useMemo(
+    () => getCartSubtotal(items, products),
+    [items, products],
+  );
   const itemCount = getCartItemCount(items);
 
   function increase(productId: string) {

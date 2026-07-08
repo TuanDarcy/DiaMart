@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import type { ItemCategory, StorefrontGame, StorefrontProduct } from "./types";
-import { supportTopics } from "./mock-data";
+import type {
+  ItemCategory,
+  StorefrontGame,
+  StorefrontProduct,
+  SupportTopic,
+} from "./types";
 import { AuthPrompt } from "./components/auth-prompt";
 import { ProductArtwork } from "./components/product-artwork";
 import { ProductCard } from "./components/product-card";
@@ -17,12 +21,14 @@ type GamePageClientProps = {
   game: StorefrontGame;
   categories: ItemCategory[];
   products: StorefrontProduct[];
+  supportTopics: SupportTopic[];
 };
 
 export function GamePageClient({
   game,
   categories,
   products,
+  supportTopics,
 }: GamePageClientProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [selectedProduct, setSelectedProduct] =
