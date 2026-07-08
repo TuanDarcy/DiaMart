@@ -41,21 +41,21 @@ export async function requireAdminSession(): Promise<AdminSession> {
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {
-    redirect("/admin/login?error=auth_required");
+    redirect("/login?status=error&code=auth_required");
   }
 
   const user = data.user;
   const email = user.email ?? "";
 
   if (!email) {
-    redirect("/admin/login?error=auth_required");
+    redirect("/login?status=error&code=auth_required");
   }
 
   const adminRow = await getAdminUserRow(user.id);
 
   if (!adminRow) {
     await supabase.auth.signOut();
-    redirect("/admin/login?error=not_admin");
+    redirect("/login?status=error&code=not_admin");
   }
 
   return {

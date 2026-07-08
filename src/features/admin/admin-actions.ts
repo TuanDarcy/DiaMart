@@ -84,7 +84,7 @@ export async function adminLoginAction(formData: FormData) {
   const password = getString(formData, "password");
 
   if (!email || !password) {
-    redirectWith("/admin/login", "error", "Email và password là bắt buộc.");
+    redirectWith("/login", "error", "Email and password are required.");
   }
 
   const supabase = await createClient();
@@ -92,9 +92,9 @@ export async function adminLoginAction(formData: FormData) {
 
   if (error) {
     redirectWith(
-      "/admin/login",
+      "/login",
       "error",
-      "Đăng nhập thất bại. Kiểm tra lại tài khoản.",
+      "Login failed. Please check your account credentials.",
     );
   }
 
@@ -102,7 +102,7 @@ export async function adminLoginAction(formData: FormData) {
   const userId = data.user?.id;
 
   if (!userId) {
-    redirectWith("/admin/login", "error", "Không tìm thấy phiên đăng nhập.");
+    redirectWith("/login", "error", "No active login session found.");
   }
 
   const { data: adminRow, error: adminError } = await supabase
@@ -115,14 +115,14 @@ export async function adminLoginAction(formData: FormData) {
   if (adminError || !adminRow) {
     await supabase.auth.signOut();
     redirectWith(
-      "/admin/login",
+      "/login",
       "error",
-      "Tài khoản chưa có quyền admin. Hãy thêm user vào bảng admin_users.",
+      "This account is not an admin yet. Add the user to the admin_users table.",
     );
   }
 
   redirect(
-    `/admin?status=success&message=${encodeURIComponent("Đăng nhập admin thành công.")}`,
+    `/admin?status=success&message=${encodeURIComponent("Admin login successful.")}`,
   );
 }
 
@@ -130,7 +130,7 @@ export async function adminLogoutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect(
-    `/admin/login?status=success&message=${encodeURIComponent("Đã đăng xuất admin.")}`,
+    `/login?status=success&code=${encodeURIComponent("logout_success")}`,
   );
 }
 
@@ -142,7 +142,7 @@ export async function upsertGameAction(formData: FormData) {
   const slugInput = getString(formData, "slug");
 
   if (!name) {
-    redirectWith("/admin", "error", "Game name là bắt buộc.");
+    redirectWith("/admin", "error", "Game name is required.");
   }
 
   const id = idInput || slugify(name);
@@ -167,10 +167,10 @@ export async function upsertGameAction(formData: FormData) {
     .upsert([payload] as never[], { onConflict: "id" });
 
   if (error) {
-    redirectWith("/admin", "error", `Lưu game lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to save game: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", `Đã lưu game ${name}.`);
+  redirectWith("/admin", "success", `Saved game ${name}.`);
 }
 
 export async function deleteGameAction(formData: FormData) {
@@ -178,7 +178,7 @@ export async function deleteGameAction(formData: FormData) {
   const id = getString(formData, "id");
 
   if (!id) {
-    redirectWith("/admin", "error", "Thiếu id game để xóa.");
+    redirectWith("/admin", "error", "Missing game id for delete action.");
   }
 
   const supabase = await createClient();
@@ -188,10 +188,10 @@ export async function deleteGameAction(formData: FormData) {
     .eq("id", id);
 
   if (error) {
-    redirectWith("/admin", "error", `Xóa game lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to delete game: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", `Đã xóa game ${id}.`);
+  redirectWith("/admin", "success", `Deleted game ${id}.`);
 }
 
 export async function upsertCategoryAction(formData: FormData) {
@@ -201,7 +201,7 @@ export async function upsertCategoryAction(formData: FormData) {
   const label = getString(formData, "label");
 
   if (!label) {
-    redirectWith("/admin", "error", "Category label là bắt buộc.");
+    redirectWith("/admin", "error", "Category label is required.");
   }
 
   const id = idInput || slugify(label);
@@ -221,10 +221,10 @@ export async function upsertCategoryAction(formData: FormData) {
     .upsert([payload] as never[], { onConflict: "id" });
 
   if (error) {
-    redirectWith("/admin", "error", `Lưu category lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to save category: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", `Đã lưu category ${label}.`);
+  redirectWith("/admin", "success", `Saved category ${label}.`);
 }
 
 export async function deleteCategoryAction(formData: FormData) {
@@ -232,7 +232,7 @@ export async function deleteCategoryAction(formData: FormData) {
   const id = getString(formData, "id");
 
   if (!id) {
-    redirectWith("/admin", "error", "Thiếu id category để xóa.");
+    redirectWith("/admin", "error", "Missing category id for delete action.");
   }
 
   const supabase = await createClient();
@@ -242,10 +242,10 @@ export async function deleteCategoryAction(formData: FormData) {
     .eq("id", id);
 
   if (error) {
-    redirectWith("/admin", "error", `Xóa category lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to delete category: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", `Đã xóa category ${id}.`);
+  redirectWith("/admin", "success", `Deleted category ${id}.`);
 }
 
 export async function upsertProductAction(formData: FormData) {
@@ -261,7 +261,7 @@ export async function upsertProductAction(formData: FormData) {
     redirectWith(
       "/admin",
       "error",
-      "Product cần ít nhất name, game_id và category_id.",
+      "Product requires at least name, game_id, and category_id.",
     );
   }
 
@@ -298,10 +298,10 @@ export async function upsertProductAction(formData: FormData) {
     .upsert([payload] as never[], { onConflict: "id" });
 
   if (error) {
-    redirectWith("/admin", "error", `Lưu product lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to save product: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", `Đã lưu product ${name}.`);
+  redirectWith("/admin", "success", `Saved product ${name}.`);
 }
 
 export async function deleteProductAction(formData: FormData) {
@@ -309,7 +309,7 @@ export async function deleteProductAction(formData: FormData) {
   const id = getString(formData, "id");
 
   if (!id) {
-    redirectWith("/admin", "error", "Thiếu id product để xóa.");
+    redirectWith("/admin", "error", "Missing product id for delete action.");
   }
 
   const supabase = await createClient();
@@ -319,10 +319,10 @@ export async function deleteProductAction(formData: FormData) {
     .eq("id", id);
 
   if (error) {
-    redirectWith("/admin", "error", `Xóa product lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to delete product: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", `Đã xóa product ${id}.`);
+  redirectWith("/admin", "success", `Deleted product ${id}.`);
 }
 
 export async function upsertFaqAction(formData: FormData) {
@@ -332,7 +332,7 @@ export async function upsertFaqAction(formData: FormData) {
   const question = getString(formData, "question");
 
   if (!question) {
-    redirectWith("/admin", "error", "FAQ question là bắt buộc.");
+    redirectWith("/admin", "error", "FAQ question is required.");
   }
 
   const id = idInput || slugify(question);
@@ -352,10 +352,10 @@ export async function upsertFaqAction(formData: FormData) {
     .upsert([payload] as never[], { onConflict: "id" });
 
   if (error) {
-    redirectWith("/admin", "error", `Lưu FAQ lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to save FAQ: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", "Đã lưu FAQ.");
+  redirectWith("/admin", "success", "Saved FAQ entry.");
 }
 
 export async function deleteFaqAction(formData: FormData) {
@@ -363,7 +363,7 @@ export async function deleteFaqAction(formData: FormData) {
   const id = getString(formData, "id");
 
   if (!id) {
-    redirectWith("/admin", "error", "Thiếu id FAQ để xóa.");
+    redirectWith("/admin", "error", "Missing FAQ id for delete action.");
   }
 
   const supabase = await createClient();
@@ -373,10 +373,10 @@ export async function deleteFaqAction(formData: FormData) {
     .eq("id", id);
 
   if (error) {
-    redirectWith("/admin", "error", `Xóa FAQ lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to delete FAQ: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", `Đã xóa FAQ ${id}.`);
+  redirectWith("/admin", "success", `Deleted FAQ ${id}.`);
 }
 
 export async function upsertSupportTopicAction(formData: FormData) {
@@ -386,7 +386,7 @@ export async function upsertSupportTopicAction(formData: FormData) {
   const label = getString(formData, "label");
 
   if (!label) {
-    redirectWith("/admin", "error", "Support topic label là bắt buộc.");
+    redirectWith("/admin", "error", "Support topic label is required.");
   }
 
   const id = idInput || slugify(label);
@@ -407,10 +407,10 @@ export async function upsertSupportTopicAction(formData: FormData) {
     .upsert([payload] as never[], { onConflict: "id" });
 
   if (error) {
-    redirectWith("/admin", "error", `Lưu support topic lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to save support topic: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", "Đã lưu support topic.");
+  redirectWith("/admin", "success", "Saved support topic.");
 }
 
 export async function deleteSupportTopicAction(formData: FormData) {
@@ -418,7 +418,7 @@ export async function deleteSupportTopicAction(formData: FormData) {
   const id = getString(formData, "id");
 
   if (!id) {
-    redirectWith("/admin", "error", "Thiếu id support topic để xóa.");
+    redirectWith("/admin", "error", "Missing support topic id for delete action.");
   }
 
   const supabase = await createClient();
@@ -428,10 +428,10 @@ export async function deleteSupportTopicAction(formData: FormData) {
     .eq("id", id);
 
   if (error) {
-    redirectWith("/admin", "error", `Xóa support topic lỗi: ${error.message}`);
+    redirectWith("/admin", "error", `Failed to delete support topic: ${error.message}`);
   }
 
-  redirectWith("/admin", "success", `Đã xóa support topic ${id}.`);
+  redirectWith("/admin", "success", `Deleted support topic ${id}.`);
 }
 
 function sanitizeFilename(filename: string) {
@@ -447,13 +447,13 @@ export async function uploadStorefrontImageAction(formData: FormData) {
   const fileValue = formData.get("imageFile");
 
   if (!isFileValue(fileValue)) {
-    redirectWith("/admin", "error", "Vui lòng chọn file ảnh để upload.");
+    redirectWith("/admin", "error", "Please select an image file to upload.");
   }
 
   const file = fileValue;
 
   if (file.size === 0) {
-    redirectWith("/admin", "error", "File ảnh rỗng.");
+    redirectWith("/admin", "error", "Image file is empty.");
   }
 
   const supabase = await createClient();
@@ -465,7 +465,7 @@ export async function uploadStorefrontImageAction(formData: FormData) {
     .upload(filePath, file, { upsert: false, contentType: file.type });
 
   if (uploadError) {
-    redirectWith("/admin", "error", `Upload ảnh lỗi: ${uploadError.message}`);
+    redirectWith("/admin", "error", `Image upload failed: ${uploadError.message}`);
   }
 
   const { data } = supabase.storage
@@ -473,6 +473,6 @@ export async function uploadStorefrontImageAction(formData: FormData) {
     .getPublicUrl(filePath);
 
   redirect(
-    `/admin?status=success&message=${encodeURIComponent("Upload ảnh thành công.")}&uploadedUrl=${encodeURIComponent(data.publicUrl)}`,
+    `/admin?status=success&message=${encodeURIComponent("Image uploaded successfully.")}&uploadedUrl=${encodeURIComponent(data.publicUrl)}`,
   );
 }

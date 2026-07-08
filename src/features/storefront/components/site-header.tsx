@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 type SiteHeaderProps = {
   cartItemCount: number;
@@ -17,6 +18,117 @@ const navLinks = [
 
 export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isLoadingSession, setIsLoadingSession] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [displayBalance, setDisplayBalance] = useState<string>("$0.00");
+  const [dismissDiscordPopup, setDismissDiscordPopup] = useState(false);
+
+  const canUseSupabase =
+    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+    Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  const urlParams =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : null;
+  const flashLogin = urlParams?.get("flash");
+  const discordStatus = urlParams?.get("discord");
+  const discordLinked = discordStatus === "linked";
+  const showDiscordPopup = flashLogin === "login_success" && !dismissDiscordPopup;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadSession() {
+      if (!canUseSupabase || typeof window === "undefined") {
+        setIsLoadingSession(false);
+        return;
+      }
+
+      const supabase = createClient();
+      const { data } = await supabase.auth.getUser();
+      const user = data.user;
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (!user) {
+        setDisplayName(null);
+        setIsAdmin(false);
+        setDisplayBalance("$0.00");
+        setIsLoadingSession(false);
+        return;
+      }
+
+      const metadata = user.user_metadata ?? {};
+      const usernameFromMeta =
+        typeof metadata.username === "string" ? metadata.username : null;
+      const emailUsername = user.email?.split("@")[0] ?? "User";
+
+      setDisplayName(usernameFromMeta || emailUsername);
+
+      const balanceValue =
+        typeof metadata.balanceUsd === "number"
+          ? metadata.balanceUsd
+          : Number(metadata.balanceUsd ?? 0);
+      const normalizedBalance = Number.isFinite(balanceValue) ? balanceValue : 0;
+      setDisplayBalance(
+        new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 2,
+        }).format(normalizedBalance),
+      );
+
+      const { data: adminRow, error } = await supabase
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .eq("is_active", true)
+        .maybeSingle();
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (error) {
+        console.error("[site-header] Admin check failed", error);
+      }
+
+      setIsAdmin(Boolean(adminRow));
+      setIsLoadingSession(false);
+    }
+
+    void loadSession();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [canUseSupabase]);
+
+  useEffect(() => {
+    if (showDiscordPopup) {
+      const timeout = window.setTimeout(() => {
+        setDismissDiscordPopup(true);
+      }, 6200);
+
+      return () => window.clearTimeout(timeout);
+    }
+
+    return undefined;
+  }, [showDiscordPopup]);
+
+  async function signOut() {
+    if (!canUseSupabase) {
+      window.location.href = "/";
+      return;
+    }
+
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = "/";
+  }
 
   return (
     <header className="sticky top-0 z-30 border-b border-purple-400/20 bg-[rgba(7,7,10,0.9)] backdrop-blur-xl">
@@ -69,12 +181,33 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
               </span>
             ) : null}
           </button>
-          <Link
-            className="btn-secondary hidden min-h-10 px-4 md:flex"
-            href="/login"
-          >
-            Login
-          </Link>
+          {!isLoadingSession && displayName ? (
+            <div className="hidden items-center gap-2 md:flex">
+              <div className="rounded-[12px] border border-cyan-300/30 bg-cyan-400/8 px-3 py-1.5 text-right">
+                <p className="flex items-center justify-end gap-1 text-xs text-cyan-100">
+                  <span aria-hidden="true">👤</span>
+                  <span className="font-semibold">{displayName}</span>
+                </p>
+                <p className="font-strong text-sm text-[#14f1c9]">{displayBalance}</p>
+              </div>
+              {isAdmin ? (
+                <Link className="btn-secondary min-h-10 px-3" href="/admin">
+                  <span aria-hidden="true">⚙</span>
+                  <span className="ml-1">Admin</span>
+                </Link>
+              ) : null}
+              <button className="btn-secondary min-h-10 px-3" type="button" onClick={signOut}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link
+              className="btn-secondary hidden min-h-10 px-4 md:flex"
+              href="/login"
+            >
+              Login
+            </Link>
+          )}
           <button
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-purple-500/8 text-slate-300 md:hidden"
             type="button"
@@ -106,12 +239,35 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
           ))}
           <Link
             className="rounded-[14px] border border-purple-400/20 bg-purple-500/8 px-4 py-3 text-sm font-medium text-slate-200"
-            href="/login"
+            href={displayName ? "/" : "/login"}
             onClick={() => setIsMobileNavOpen(false)}
           >
-            Login
+            {displayName ? `Signed in: ${displayName}` : "Login"}
           </Link>
+          {displayName ? (
+            <button
+              className="rounded-[14px] border border-purple-400/20 bg-purple-500/8 px-4 py-3 text-left text-sm font-medium text-slate-200"
+              type="button"
+              onClick={() => {
+                setIsMobileNavOpen(false);
+                void signOut();
+              }}
+            >
+              Logout
+            </button>
+          ) : null}
         </nav>
+      ) : null}
+
+      {showDiscordPopup ? (
+        <div className="pointer-events-none fixed bottom-4 right-4 z-50 max-w-sm rounded-[16px] border border-cyan-300/35 bg-[var(--surface-elevated)] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+          <p className="font-strong text-sm text-cyan-100">Account linked notification</p>
+          <p className="mt-2 text-sm leading-6 text-slate-300">
+            {discordLinked
+              ? "Your Discord account is linked to your shop account. After checkout, our bot can create a ticket, invite you to the support server, and tag your Discord profile automatically."
+              : "Login completed. Link your Discord account to sync web orders with our support bot and automatic ticket routing."}
+          </p>
+        </div>
       ) : null}
     </header>
   );

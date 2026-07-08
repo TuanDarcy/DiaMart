@@ -109,6 +109,16 @@ export function AdminDashboardPage({
   message,
   uploadedUrl,
 }: AdminDashboardPageProps) {
+  const navItems = [
+    { id: "summary", label: "Summary" },
+    { id: "images", label: "Image tools" },
+    { id: "games", label: "Games" },
+    { id: "categories", label: "Categories" },
+    { id: "products", label: "Products" },
+    { id: "faqs", label: "FAQs" },
+    { id: "support-topics", label: "Support topics" },
+  ];
+
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       <header className="border-b border-purple-400/20 bg-[rgba(7,7,10,0.9)] backdrop-blur-xl">
@@ -137,7 +147,25 @@ export function AdminDashboardPage({
         </div>
       </header>
 
-      <section className="container-shell section-gap grid gap-4">
+      <section className="container-shell section-gap grid gap-6 lg:grid-cols-[220px_1fr] lg:items-start">
+        <aside className="surface-panel sticky top-20 rounded-[18px] p-4">
+          <p className="font-strong text-xs uppercase tracking-[0.2em] text-cyan-200">
+            Admin menu
+          </p>
+          <nav className="mt-3 grid gap-2" aria-label="Admin navigation">
+            {navItems.map((item) => (
+              <a
+                className="rounded-[12px] border border-purple-400/20 bg-black/25 px-3 py-2 text-sm text-slate-200 transition hover:border-cyan-300/35 hover:text-white"
+                href={`#${item.id}`}
+                key={item.id}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </aside>
+
+        <div className="grid gap-4">
         {message ? (
           <div
             className={`rounded-[14px] border p-3 text-sm ${
@@ -156,7 +184,7 @@ export function AdminDashboardPage({
           </div>
         ) : null}
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" id="summary">
           <SummaryCard label="Games" value={data.summary.totalGames} />
           <SummaryCard
             label="Categories"
@@ -178,11 +206,11 @@ export function AdminDashboardPage({
           />
         </div>
 
-        <article className="surface-panel rounded-[20px] p-5">
+        <article className="surface-panel rounded-[20px] p-5" id="images">
           <h2 className="font-heading text-xl text-white">Image tools</h2>
           <p className="mt-2 text-sm text-slate-300">
-            Bạn có thể upload ảnh lên Supabase Storage hoặc paste URL CDN/public
-            URL trực tiếp vào image_src của game/product.
+            You can upload images to Supabase Storage or paste a CDN/public URL
+            directly into the image_src field for games and products.
           </p>
           <form
             action={uploadStorefrontImageAction}
@@ -208,7 +236,7 @@ export function AdminDashboardPage({
         </article>
 
         <section className="grid gap-6">
-          <article className="surface-panel rounded-[20px] p-5">
+          <article className="surface-panel rounded-[20px] p-5" id="games">
             <h2 className="font-heading text-xl text-white">CRUD games</h2>
             <form
               action={upsertGameAction}
@@ -313,7 +341,7 @@ export function AdminDashboardPage({
             </div>
           </article>
 
-          <article className="surface-panel rounded-[20px] p-5">
+          <article className="surface-panel rounded-[20px] p-5" id="categories">
             <h2 className="font-heading text-xl text-white">CRUD categories</h2>
             <form
               action={upsertCategoryAction}
@@ -393,7 +421,7 @@ export function AdminDashboardPage({
             </div>
           </article>
 
-          <article className="surface-panel rounded-[20px] p-5">
+          <article className="surface-panel rounded-[20px] p-5" id="products">
             <h2 className="font-heading text-xl text-white">CRUD products</h2>
             <form
               action={upsertProductAction}
@@ -661,7 +689,7 @@ export function AdminDashboardPage({
             </div>
           </article>
 
-          <article className="surface-panel rounded-[20px] p-5">
+          <article className="surface-panel rounded-[20px] p-5" id="faqs">
             <h2 className="font-heading text-xl text-white">CRUD FAQs</h2>
             <form
               action={upsertFaqAction}
@@ -746,7 +774,7 @@ export function AdminDashboardPage({
             </div>
           </article>
 
-          <article className="surface-panel rounded-[20px] p-5">
+          <article className="surface-panel rounded-[20px] p-5" id="support-topics">
             <h2 className="font-heading text-xl text-white">
               CRUD support topics
             </h2>
@@ -844,6 +872,7 @@ export function AdminDashboardPage({
             </div>
           </article>
         </section>
+        </div>
       </section>
     </main>
   );

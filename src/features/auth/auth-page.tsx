@@ -1,11 +1,40 @@
 import Link from "next/link";
+import { loginAction, registerAction } from "./auth-actions";
 
 type AuthPageProps = {
   mode: "login" | "register";
+  status?: string;
+  code?: string;
 };
 
-export function AuthPage({ mode }: AuthPageProps) {
+function resolveMessage(status?: string, code?: string) {
+  if (status !== "error" && status !== "success") {
+    return null;
+  }
+
+  const messages: Record<string, string> = {
+    auth_required: "Please login first.",
+    not_admin: "Your account is signed in, but it does not have admin permission.",
+    logout_success: "You have been signed out.",
+    missing_credentials: "Please enter your email and password.",
+    invalid_credentials: "Invalid email or password.",
+    missing_fields: "Please fill all required fields.",
+    password_mismatch: "Passwords do not match.",
+    weak_password: "Password must be at least 6 characters.",
+    register_failed: "Could not create account. Please try again.",
+    register_success:
+      "Account created. You can login now (or confirm email if required).",
+  };
+
+  return {
+    status,
+    text: messages[code ?? ""] ?? "Action completed.",
+  };
+}
+
+export function AuthPage({ mode, status, code }: AuthPageProps) {
   const isLogin = mode === "login";
+  const notice = resolveMessage(status, code);
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
@@ -32,7 +61,7 @@ export function AuthPage({ mode }: AuthPageProps) {
       <section className="container-shell flex min-h-[calc(100vh-5rem)] items-center justify-center py-10">
         <div className="surface-panel entrance-rise w-full max-w-md rounded-[26px] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.42)]">
           <p className="font-strong text-center text-xs uppercase tracking-[0.22em] text-fuchsia-300">
-            {isLogin ? "Customer login" : "Create account"}
+            {isLogin ? "Login" : "Create account"}
           </p>
           <h1 className="font-heading mt-3 text-center text-4xl font-semibold leading-tight text-white">
             {isLogin ? "Welcome back" : "Create your account"}
@@ -44,14 +73,30 @@ export function AuthPage({ mode }: AuthPageProps) {
             </p>
           ) : null}
 
-          <form className="mt-6 grid gap-4">
+          {notice ? (
+            <div
+              className={`mt-5 rounded-[16px] border p-3 text-sm leading-6 ${
+                notice.status === "error"
+                  ? "border-red-400/35 bg-red-400/10 text-red-100"
+                  : "border-cyan-300/35 bg-cyan-400/10 text-cyan-100"
+              }`}
+            >
+              {notice.text}
+            </div>
+          ) : null}
+
+          <form
+            action={isLogin ? loginAction : registerAction}
+            className="mt-6 grid gap-4"
+          >
             {!isLogin ? (
               <label className="text-sm font-medium text-slate-300">
-                Name
+                Username
                 <input
                   className="mt-2 min-h-11 w-full rounded-[14px] border border-purple-400/20 bg-black/35 px-4 text-white outline-none focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20"
-                  placeholder="Your name"
+                  placeholder="your_username"
                   type="text"
+                  name="username"
                 />
               </label>
             ) : null}
@@ -61,6 +106,8 @@ export function AuthPage({ mode }: AuthPageProps) {
                 className="mt-2 min-h-11 w-full rounded-[14px] border border-purple-400/20 bg-black/35 px-4 text-white outline-none focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20"
                 placeholder="you@example.com"
                 type="email"
+                name="email"
+                required
               />
             </label>
             <label className="text-sm font-medium text-slate-300">
@@ -71,6 +118,8 @@ export function AuthPage({ mode }: AuthPageProps) {
                   isLogin ? "Enter your password" : "Create a password"
                 }
                 type="password"
+                name="password"
+                required
               />
             </label>
             {!isLogin ? (
@@ -80,21 +129,14 @@ export function AuthPage({ mode }: AuthPageProps) {
                   className="mt-2 min-h-11 w-full rounded-[14px] border border-purple-400/20 bg-black/35 px-4 text-white outline-none focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20"
                   placeholder="Re-enter your password"
                   type="password"
+                  name="confirmPassword"
+                  required
                 />
               </label>
             ) : null}
 
-            <div className="rounded-[16px] border border-amber-300/25 bg-amber-300/10 p-3 text-sm leading-6 text-amber-50">
-              Account access is being prepared. You can browse the storefront
-              now; checkout will require login when accounts open.
-            </div>
-
-            <button
-              className="btn-primary min-h-11 w-full cursor-not-allowed opacity-70"
-              type="button"
-              disabled
-            >
-              {isLogin ? "Login opening soon" : "Registration opening soon"}
+            <button className="btn-primary min-h-11 w-full" type="submit">
+              {isLogin ? "Login" : "Create account"}
             </button>
           </form>
 

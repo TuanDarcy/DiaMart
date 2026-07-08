@@ -31,11 +31,11 @@ export function AdminLoginPage({ status, message }: AdminLoginPageProps) {
             Admin panel
           </p>
           <h1 className="font-heading mt-2 text-3xl font-semibold text-white">
-            Login quản trị
+            Admin login
           </h1>
           <p className="mt-3 text-sm leading-6 text-slate-300">
-            Đăng nhập bằng tài khoản Supabase Auth đã được thêm vào bảng
-            admin_users.
+            Sign in with a Supabase Auth account that exists in the admin_users
+            table.
           </p>
 
           {message ? (
