@@ -121,13 +121,17 @@ export async function adminLoginAction(formData: FormData) {
     );
   }
 
-  redirect("/admin?status=success&message=Đăng nhập admin thành công.");
+  redirect(
+    `/admin?status=success&message=${encodeURIComponent("Đăng nhập admin thành công.")}`,
+  );
 }
 
 export async function adminLogoutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/admin/login?status=success&message=Đã đăng xuất admin.");
+  redirect(
+    `/admin/login?status=success&message=${encodeURIComponent("Đã đăng xuất admin.")}`,
+  );
 }
 
 export async function upsertGameAction(formData: FormData) {
