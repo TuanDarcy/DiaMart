@@ -341,15 +341,67 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
       ) : null}
 
       {showDiscordPopup ? (
-        <div className="pointer-events-none fixed bottom-4 right-4 z-50 max-w-sm rounded-[16px] border border-cyan-300/35 bg-[var(--surface-elevated)] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-          <p className="font-strong text-sm text-cyan-100">
-            Account linked notification
-          </p>
-          <p className="mt-2 text-sm leading-6 text-slate-300">
-            {discordLinked
-              ? "Your Discord account is linked to your shop account. After checkout, our bot can create a ticket, invite you to the support server, and tag your Discord profile automatically."
-              : "Login completed. Link your Discord account to sync web orders with our support bot and automatic ticket routing."}
-          </p>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="discord-popup-title"
+        >
+          <div className="entrance-rise surface-panel-strong w-full max-w-md rounded-[24px] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="font-strong text-xs uppercase tracking-[0.2em] text-fuchsia-300">
+                  Account connected
+                </p>
+                <h2
+                  className="font-heading mt-2 text-xl font-semibold text-white"
+                  id="discord-popup-title"
+                >
+                  Link your Discord account
+                </h2>
+              </div>
+              <button
+                className="btn-icon"
+                type="button"
+                onClick={() => setDismissDiscordPopup(true)}
+                aria-label="Close popup"
+              >
+                <svg className="icon-md icon-wrap" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            <p className="mt-4 text-sm leading-6 text-slate-300">
+              {discordLinked
+                ? "Your Discord account is linked to your shop account. After checkout, our bot can create a ticket, invite you to the support server, and tag your Discord profile automatically."
+                : "Login completed. Link your Discord account to sync web orders with our support bot and automatic ticket routing."}
+            </p>
+            <div className="mt-5 flex items-center gap-3">
+              <button
+                className="btn-primary min-h-11 flex-1"
+                type="button"
+                onClick={() => setDismissDiscordPopup(true)}
+              >
+                {discordLinked ? "Got it" : "Connect Discord"}
+              </button>
+              <button
+                className="btn-secondary min-h-11 flex-1"
+                type="button"
+                onClick={() => {
+                  // Don't show for 24h
+                  try {
+                    localStorage.setItem("diamart_discord_dismiss", "1");
+                  } catch {
+                    /* noop */
+                  }
+                  setDismissDiscordPopup(true);
+                }}
+              >
+                Don&apos;t show for 24h
+              </button>
+            </div>
+          </div>
         </div>
       ) : null}
     </header>
