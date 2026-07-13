@@ -8,6 +8,7 @@ Thư mục `docs` là nơi lưu tài liệu kỹ thuật, yêu cầu sản phẩ
 - `architecture.md`: kiến trúc hệ thống, luồng deploy dự kiến và cấu trúc code.
 - `database.md`: nguyên tắc database, trạng thái schema và checklist thay đổi dữ liệu.
 - `ui-components.md`: nguyên tắc component UI và danh sách component tái sử dụng quan trọng.
+- `ai-ui-guidance.md`: hướng dẫn UI/UX để AI làm UI đúng chuẩn DiaMart, bao gồm nguyên tắc từ repo tham khảo `docs/references/ui-ux-pro-max-skill`.
 - `development-workflow.md`: workflow phát triển, branch, commit, review và deploy preview.
 - `features/`: tài liệu từng chức năng khi có logic hoặc hành vi người dùng riêng.
 - `decisions/`: Architecture Decision Records cho quyết định kiến trúc quan trọng.

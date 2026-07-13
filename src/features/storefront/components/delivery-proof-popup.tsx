@@ -85,11 +85,23 @@ export function DeliveryProofPopup() {
               Live proof
             </span>
             <button
-              className="text-xs font-semibold text-slate-400 hover:text-white"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 transition hover:text-white"
               type="button"
               onClick={dismiss}
               aria-label="Dismiss delivery proof"
             >
+              <svg
+                className="icon-sm"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
               Dismiss
             </button>
           </div>
@@ -112,7 +124,7 @@ export function DeliveryProofPopup() {
         className="absolute bottom-0 left-0 h-0.5 w-full bg-fuchsia-950/70"
         aria-hidden="true"
       >
-        <div className="proof-progress h-full w-full bg-gradient-to-r from-purple-400 via-fuchsia-500 to-[#14f1c9]" />
+        <div className="proof-progress h-full w-full bg-gradient-to-r from-[var(--primary)] via-[var(--magenta)] to-[var(--mint)]" />
       </div>
     </aside>
   );

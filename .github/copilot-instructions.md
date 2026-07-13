@@ -6,9 +6,10 @@ Trước khi sửa code:
 
 1. Đọc `docs/project-overview.md`.
 2. Đọc `docs/architecture.md`.
-3. Đọc tài liệu feature liên quan nếu có.
-4. Kiểm tra code hiện tại.
-5. Kiểm tra Supabase migrations nếu thay đổi liên quan dữ liệu.
+3. Đọc `docs/ai-ui-guidance.md` khi làm việc liên quan đến UI/UX.
+4. Đọc tài liệu feature liên quan nếu có.
+5. Kiểm tra code hiện tại.
+6. Kiểm tra Supabase migrations nếu thay đổi liên quan dữ liệu.
 
 Không được dựa hoàn toàn vào tài liệu nếu code hiện tại cho thấy sự khác biệt. Phải báo sự không thống nhất.
 

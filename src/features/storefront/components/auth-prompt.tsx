@@ -36,7 +36,18 @@ export function AuthPrompt({ isOpen, onClose }: AuthPromptProps) {
             onClick={onClose}
             aria-label="Close login prompt"
           >
-            <span aria-hidden="true">✕</span>
+            <svg
+              className="icon-md icon-wrap"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
         </div>
         <p className="mt-4 text-sm leading-6 text-slate-300">

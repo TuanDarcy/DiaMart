@@ -14,7 +14,8 @@ function resolveMessage(status?: string, code?: string) {
 
   const messages: Record<string, string> = {
     auth_required: "Please login first.",
-    not_admin: "Your account is signed in, but it does not have admin permission.",
+    not_admin:
+      "Your account is signed in, but it does not have admin permission.",
     logout_success: "You have been signed out.",
     missing_credentials: "Please enter your email and password.",
     invalid_credentials: "Invalid email or password.",
@@ -93,7 +94,7 @@ export function AuthPage({ mode, status, code }: AuthPageProps) {
               <label className="text-sm font-medium text-slate-300">
                 Username
                 <input
-                  className="mt-2 min-h-11 w-full rounded-[14px] border border-purple-400/20 bg-black/35 px-4 text-white outline-none focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20"
+                  className="mt-2 min-h-11 w-full rounded-[14px] border border-[var(--border)] bg-black/35 px-4 text-white outline-none transition focus:border-[var(--magenta)]/50 focus:ring-4 focus:ring-[var(--magenta)]/20"
                   placeholder="your_username"
                   type="text"
                   name="username"
@@ -103,7 +104,7 @@ export function AuthPage({ mode, status, code }: AuthPageProps) {
             <label className="text-sm font-medium text-slate-300">
               Email
               <input
-                className="mt-2 min-h-11 w-full rounded-[14px] border border-purple-400/20 bg-black/35 px-4 text-white outline-none focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20"
+                className="mt-2 min-h-11 w-full rounded-[14px] border border-[var(--border)] bg-black/35 px-4 text-white outline-none transition focus:border-[var(--magenta)]/50 focus:ring-4 focus:ring-[var(--magenta)]/20"
                 placeholder="you@example.com"
                 type="email"
                 name="email"
@@ -113,7 +114,7 @@ export function AuthPage({ mode, status, code }: AuthPageProps) {
             <label className="text-sm font-medium text-slate-300">
               Password
               <input
-                className="mt-2 min-h-11 w-full rounded-[14px] border border-purple-400/20 bg-black/35 px-4 text-white outline-none focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20"
+                className="mt-2 min-h-11 w-full rounded-[14px] border border-[var(--border)] bg-black/35 px-4 text-white outline-none transition focus:border-[var(--magenta)]/50 focus:ring-4 focus:ring-[var(--magenta)]/20"
                 placeholder={
                   isLogin ? "Enter your password" : "Create a password"
                 }
@@ -126,7 +127,7 @@ export function AuthPage({ mode, status, code }: AuthPageProps) {
               <label className="text-sm font-medium text-slate-300">
                 Confirm password
                 <input
-                  className="mt-2 min-h-11 w-full rounded-[14px] border border-purple-400/20 bg-black/35 px-4 text-white outline-none focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20"
+                  className="mt-2 min-h-11 w-full rounded-[14px] border border-[var(--border)] bg-black/35 px-4 text-white outline-none transition focus:border-[var(--magenta)]/50 focus:ring-4 focus:ring-[var(--magenta)]/20"
                   placeholder="Re-enter your password"
                   type="password"
                   name="confirmPassword"
@@ -143,7 +144,7 @@ export function AuthPage({ mode, status, code }: AuthPageProps) {
           <p className="mt-5 text-center text-sm text-slate-400">
             {isLogin ? "Need an account?" : "Already have an account?"}{" "}
             <Link
-              className="font-strong text-[#14f1c9]"
+              className="font-strong text-[var(--mint)]"
               href={isLogin ? "/register" : "/login"}
             >
               {isLogin ? "Register" : "Login"}

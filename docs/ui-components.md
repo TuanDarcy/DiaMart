@@ -6,7 +6,6 @@
 - `SiteFooter` (`src/features/storefront/components/site-footer.tsx`): shared footer with the marketplace description, store links, and Discord/Telegram support links. It does not include login/register links.
 - `AuthPrompt` (`src/features/storefront/components/auth-prompt.tsx`): modal shown when an unauthenticated user tries a cart/order action, linking to `/login` and `/register`.
 - `GameCarousel` (`src/features/storefront/components/game-carousel.tsx`): Telegram-style stacked game cards that auto-rotate and can be swiped manually; the front card links to `/games/[slug]`.
-- `ProductMarquee` (`src/features/storefront/components/product-marquee.tsx`): a slow, infinite horizontal carousel (carousel-horse style) used for best-seller and trending items across games. Cards link to the matching game store.
 - `HomePage` (`src/features/storefront/home-page.tsx`): the home composition (hero, game carousel, best-seller/trending marquees, trust, process, delivery proof, FAQ, support, footer).
 - `GamePageClient` (`src/features/storefront/game-page-client.tsx`) with route `src/app/games/[slug]/page.tsx`: per-game store page with a game hero, category tabs, and a product grid. Add-to-cart requires login.
 
@@ -129,7 +128,7 @@ Inputs should use dark elevated surfaces, visible borders, clear labels, accessi
 
 ### SearchBar
 
-Search is implemented inside `src/features/storefront/storefront-app.tsx`. It supports product name, category, and game-name matching for Grow a Garden 2 mock data. The result count appears only after the buyer types, and the placeholder uses a typewriter effect that rotates through product names.
+Search is implemented inside `src/features/storefront/home-page.tsx`. It supports product name, category, and game-name matching from catalog data. The result count appears only after the buyer types.
 
 ### ProductImage
 
@@ -137,39 +136,9 @@ Product image rendering is implemented in `src/features/storefront/components/pr
 
 ## Implemented Layout Components
 
-### AnnouncementBar
-
-Implemented inside `src/features/storefront/storefront-app.tsx` as a compact top message for delivery, security, and Discord support. It does not create false urgency.
-
-### Header
-
-Implemented inside `src/features/storefront/storefront-app.tsx` with brand, shopping links, search access, cart entry, support access, and mobile menu trigger.
-
-### MobileNavigation
-
-Implemented as a compact mobile navigation panel inside `src/features/storefront/storefront-app.tsx`.
-
-### Footer
-
-Implemented inside `src/features/storefront/storefront-app.tsx` with navigation groups, support labels, policy placeholders, and Roblox non-affiliation disclaimer.
-
 ### CartDrawer
 
 Implemented in `src/features/storefront/components/cart-drawer.tsx`. It opens from add-to-cart actions, stores preview items locally, and clearly marks checkout as coming soon. It does not simulate payment processing.
-
-## Implemented Feature Components
-
-### GameContextPanel
-
-Implemented inside `src/features/storefront/storefront-app.tsx` for the active Grow a Garden 2 storefront context. The mock data structure can accept additional games later without displaying a large future catalog now.
-
-### CategoryNav
-
-Implemented inside `src/features/storefront/storefront-app.tsx` for All, Pets, Seeds, and Gear. It supports horizontal scrolling on mobile and selected-state accessibility.
-
-### ProductShelf
-
-Implemented inside `src/features/storefront/storefront-app.tsx` for featured and popular products. It owns empty states for filtered/search results.
 
 ### ProductCard
 
@@ -189,22 +158,6 @@ Implemented in `src/features/storefront/components/product-card.tsx`. The core m
 
 Prices are formatted with `src/lib/utils/format-money.ts`.
 
-### HeroSection
-
-Implemented inside `src/features/storefront/storefront-app.tsx` as a compact value proposition section that keeps shopping/search visible early.
-
-### TrustExplainer
-
-Implemented inside `src/features/storefront/storefront-app.tsx` with no fake metrics.
-
-### HowItWorks
-
-Implemented inside `src/features/storefront/storefront-app.tsx` as a four-step section.
-
-### DeliveryProofSection
-
-Implemented inside `src/features/storefront/storefront-app.tsx`. Preview/sample events are clearly labeled and do not represent real deliveries.
-
 ### DeliveryProofPopup
 
 Implemented in `src/features/storefront/components/delivery-proof-popup.tsx`. It is development/preview-only, delayed, dismissible, non-disruptive, and hidden in production builds while only mock proof events exist.
@@ -215,33 +168,7 @@ Implemented in `src/features/storefront/components/support-widget.tsx`. It route
 
 ### Auth Pages
 
-Implemented in `src/features/auth/auth-page.tsx` with routes `src/app/login/page.tsx` and `src/app/register/page.tsx`. Browsing is public, while cart/order-start actions prompt users to login or register. Account access is visually prepared but not connected to authentication yet.
-
-### Catalog Tabs
-
-Implemented inside `src/features/storefront/storefront-app.tsx`. The Grow a Garden 2 catalog supports Trending, Pets, Seeds, and Gear tabs. The active game card scrolls users into the catalog.
-
-### FAQSection
-
-Implemented inside `src/features/storefront/storefront-app.tsx` as direct question-and-answer cards so answers are visible without expanding disclosures.
-
-## Utility Components And Helpers
-
-### USD Money Formatter
-
-Implemented in `src/lib/utils/format-money.ts` with `Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })`. Product data stores numeric `priceUsd` values rather than primary preformatted price strings.
-
-### ProductDetailModal
-
-Implemented in `src/features/storefront/components/product-detail-modal.tsx`. It provides a lightweight accessible modal with product image, name, category, price, delivery estimate, stock state, description, quantity controls, and add-to-cart action.
-
-### CartPageClient
-
-Implemented in `src/features/storefront/cart-page-client.tsx` and routed through `src/app/cart/page.tsx`. It reads the same local cart storage as the drawer and keeps checkout clearly unavailable in preview.
-
-## Documentation Links
-
-- Home page plan: `docs/ui/pages/home.md`.
+Implemented in `src/features/auth/auth-page.tsx` with routes `src/app/login/page.tsx` and `src/app/register/page.tsx`. Browsing is public, while cart/order-start actions prompt users to login or register.
 - Support widget plan: `docs/ui/pages/support-widget.md`.
 - Delivery proof popup plan: `docs/ui/pages/delivery-proof-popup.md`.
 - Reference analysis: `docs/ui/references/petmart-analysis.md`.

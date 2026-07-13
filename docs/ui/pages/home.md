@@ -600,7 +600,7 @@ Implemented storefront files:
 - `src/app/layout.tsx`
 - `src/app/globals.css`
 - `src/config/site.ts`
-- `src/features/storefront/storefront-app.tsx`
+- `src/features/storefront/home-page.tsx`
 - `src/features/storefront/cart-page-client.tsx`
 - `src/features/storefront/types.ts`
 - `src/features/storefront/mock-data.ts`

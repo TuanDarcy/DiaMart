@@ -61,7 +61,7 @@ export function ProductCard({
     originalPriceUsd !== undefined && originalPriceUsd > product.priceUsd;
 
   return (
-    <article className="entrance-rise group flex h-full min-h-[430px] flex-col rounded-[18px] border border-purple-400/20 bg-[var(--surface)] p-3 shadow-[0_12px_38px_rgba(0,0,0,0.24)] transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-[var(--surface-elevated)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+    <article className="entrance-rise group flex h-full min-h-[430px] flex-col rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-3 shadow-[0_12px_38px_rgba(0,0,0,0.24)] transition-all duration-200 ease-out hover:-translate-y-1 hover:border-[var(--border-strong)] hover:bg-[var(--surface-elevated)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.34)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
       <ProductArtwork
         image={product.image}
         label={product.name}

@@ -71,7 +71,18 @@ export function CartDrawer({
             onClick={onClose}
             aria-label="Close cart"
           >
-            X
+            <svg
+              className="icon-md icon-wrap"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
         </div>
 
@@ -125,7 +136,17 @@ export function CartDrawer({
                           onClick={() => onDecrease(product.id)}
                           aria-label={`Decrease ${product.name} quantity`}
                         >
-                          -
+                          <svg
+                            className="icon-sm icon-wrap"
+                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                          >
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
                         </button>
                         <span className="min-w-10 text-center text-sm font-semibold text-white">
                           {item.quantity}
@@ -136,7 +157,18 @@ export function CartDrawer({
                           onClick={() => onIncrease(product.id)}
                           aria-label={`Increase ${product.name} quantity`}
                         >
-                          +
+                          <svg
+                            className="icon-sm icon-wrap"
+                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                          >
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
                         </button>
                       </div>
                       <p className="font-semibold text-white">

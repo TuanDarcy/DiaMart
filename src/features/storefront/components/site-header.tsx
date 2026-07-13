@@ -34,7 +34,8 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
   const flashLogin = urlParams?.get("flash");
   const discordStatus = urlParams?.get("discord");
   const discordLinked = discordStatus === "linked";
-  const showDiscordPopup = flashLogin === "login_success" && !dismissDiscordPopup;
+  const showDiscordPopup =
+    flashLogin === "login_success" && !dismissDiscordPopup;
 
   useEffect(() => {
     let isMounted = true;
@@ -72,7 +73,9 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
         typeof metadata.balanceUsd === "number"
           ? metadata.balanceUsd
           : Number(metadata.balanceUsd ?? 0);
-      const normalizedBalance = Number.isFinite(balanceValue) ? balanceValue : 0;
+      const normalizedBalance = Number.isFinite(balanceValue)
+        ? balanceValue
+        : 0;
       setDisplayBalance(
         new Intl.NumberFormat("en-US", {
           style: "currency",
@@ -174,6 +177,20 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
             onClick={onCartClick}
             aria-label={`Open cart with ${cartItemCount} items`}
           >
+            <svg
+              className="icon-md mr-1.5"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
             Cart
             {cartItemCount > 0 ? (
               <span className="font-strong ml-2 rounded-full bg-[#14f1c9] px-2 py-0.5 text-xs font-semibold text-slate-950">
@@ -184,19 +201,49 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
           {!isLoadingSession && displayName ? (
             <div className="hidden items-center gap-2 md:flex">
               <div className="rounded-[12px] border border-cyan-300/30 bg-cyan-400/8 px-3 py-1.5 text-right">
-                <p className="flex items-center justify-end gap-1 text-xs text-cyan-100">
-                  <span aria-hidden="true">👤</span>
+                <p className="flex items-center justify-end gap-1.5 text-xs text-cyan-100">
+                  <svg
+                    className="icon-sm"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
                   <span className="font-semibold">{displayName}</span>
                 </p>
-                <p className="font-strong text-sm text-[#14f1c9]">{displayBalance}</p>
+                <p className="font-strong text-sm text-[#14f1c9]">
+                  {displayBalance}
+                </p>
               </div>
               {isAdmin ? (
                 <Link className="btn-secondary min-h-10 px-3" href="/admin">
-                  <span aria-hidden="true">⚙</span>
-                  <span className="ml-1">Admin</span>
+                  <svg
+                    className="icon-sm"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                  </svg>
+                  <span className="ml-1.5">Admin</span>
                 </Link>
               ) : null}
-              <button className="btn-secondary min-h-10 px-3" type="button" onClick={signOut}>
+              <button
+                className="btn-secondary min-h-10 px-3"
+                type="button"
+                onClick={signOut}
+              >
                 Logout
               </button>
             </div>
@@ -209,14 +256,35 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
             </Link>
           )}
           <button
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-purple-500/8 text-slate-300 md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-purple-500/8 text-slate-300 transition hover:border-cyan-300/35 hover:text-white md:hidden"
             type="button"
             aria-expanded={isMobileNavOpen}
             aria-controls="mobile-navigation"
             onClick={() => setIsMobileNavOpen((value) => !value)}
             aria-label="Toggle navigation menu"
           >
-            <span aria-hidden="true">☰</span>
+            <svg
+              className="icon-md icon-wrap"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              {isMobileNavOpen ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="4" y1="6" x2="20" y2="6" />
+                  <line x1="4" y1="12" x2="20" y2="12" />
+                  <line x1="4" y1="18" x2="20" y2="18" />
+                </>
+              )}
+            </svg>
           </button>
         </div>
       </div>
@@ -261,7 +329,9 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
 
       {showDiscordPopup ? (
         <div className="pointer-events-none fixed bottom-4 right-4 z-50 max-w-sm rounded-[16px] border border-cyan-300/35 bg-[var(--surface-elevated)] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-          <p className="font-strong text-sm text-cyan-100">Account linked notification</p>
+          <p className="font-strong text-sm text-cyan-100">
+            Account linked notification
+          </p>
           <p className="mt-2 text-sm leading-6 text-slate-300">
             {discordLinked
               ? "Your Discord account is linked to your shop account. After checkout, our bot can create a ticket, invite you to the support server, and tag your Discord profile automatically."

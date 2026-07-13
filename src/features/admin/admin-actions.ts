@@ -221,7 +221,11 @@ export async function upsertCategoryAction(formData: FormData) {
     .upsert([payload] as never[], { onConflict: "id" });
 
   if (error) {
-    redirectWith("/admin", "error", `Failed to save category: ${error.message}`);
+    redirectWith(
+      "/admin",
+      "error",
+      `Failed to save category: ${error.message}`,
+    );
   }
 
   redirectWith("/admin", "success", `Saved category ${label}.`);
@@ -242,7 +246,11 @@ export async function deleteCategoryAction(formData: FormData) {
     .eq("id", id);
 
   if (error) {
-    redirectWith("/admin", "error", `Failed to delete category: ${error.message}`);
+    redirectWith(
+      "/admin",
+      "error",
+      `Failed to delete category: ${error.message}`,
+    );
   }
 
   redirectWith("/admin", "success", `Deleted category ${id}.`);
@@ -319,7 +327,11 @@ export async function deleteProductAction(formData: FormData) {
     .eq("id", id);
 
   if (error) {
-    redirectWith("/admin", "error", `Failed to delete product: ${error.message}`);
+    redirectWith(
+      "/admin",
+      "error",
+      `Failed to delete product: ${error.message}`,
+    );
   }
 
   redirectWith("/admin", "success", `Deleted product ${id}.`);
@@ -407,7 +419,11 @@ export async function upsertSupportTopicAction(formData: FormData) {
     .upsert([payload] as never[], { onConflict: "id" });
 
   if (error) {
-    redirectWith("/admin", "error", `Failed to save support topic: ${error.message}`);
+    redirectWith(
+      "/admin",
+      "error",
+      `Failed to save support topic: ${error.message}`,
+    );
   }
 
   redirectWith("/admin", "success", "Saved support topic.");
@@ -418,7 +434,11 @@ export async function deleteSupportTopicAction(formData: FormData) {
   const id = getString(formData, "id");
 
   if (!id) {
-    redirectWith("/admin", "error", "Missing support topic id for delete action.");
+    redirectWith(
+      "/admin",
+      "error",
+      "Missing support topic id for delete action.",
+    );
   }
 
   const supabase = await createClient();
@@ -428,7 +448,11 @@ export async function deleteSupportTopicAction(formData: FormData) {
     .eq("id", id);
 
   if (error) {
-    redirectWith("/admin", "error", `Failed to delete support topic: ${error.message}`);
+    redirectWith(
+      "/admin",
+      "error",
+      `Failed to delete support topic: ${error.message}`,
+    );
   }
 
   redirectWith("/admin", "success", `Deleted support topic ${id}.`);
@@ -465,7 +489,11 @@ export async function uploadStorefrontImageAction(formData: FormData) {
     .upload(filePath, file, { upsert: false, contentType: file.type });
 
   if (uploadError) {
-    redirectWith("/admin", "error", `Image upload failed: ${uploadError.message}`);
+    redirectWith(
+      "/admin",
+      "error",
+      `Image upload failed: ${uploadError.message}`,
+    );
   }
 
   const { data } = supabase.storage
