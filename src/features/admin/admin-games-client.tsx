@@ -182,6 +182,23 @@ function GameForm({
   onDone: () => void;
 }) {
   const [imgPreview, setImgPreview] = useState(game?.image_src ?? "");
+  const [uploading, setUploading] = useState(false);
+
+  async function handleFileUpload(file: File) {
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.set("imageFile", file);
+      const res = await fetch("/admin/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const { url } = await res.json();
+      if (url) setImgPreview(url);
+    } catch (err) {
+      console.error("[upload]", err);
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <form
@@ -216,12 +233,27 @@ function GameForm({
             src={imgPreview}
             alt="Preview"
             className="mt-1 h-16 w-16 rounded-lg object-cover"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
           />
         ) : null}
-        <p className="text-xs" style={{ color: C.textSecondary }}>
-          Paste a .png or .jpg URL. Use free image hosting like imgur,
-          postimages, or paste direct CDN links.
-        </p>
+        <div className="mt-2">
+          <label
+            className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-lg border px-4 text-sm font-medium transition-all hover:opacity-80"
+            style={{ borderColor: C.cardBorder, color: C.textPrimary, backgroundColor: "#fff" }}
+          >
+            {uploading ? "Uploading..." : "Upload file"}
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif"
+              className="sr-only"
+              disabled={uploading}
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) await handleFileUpload(file);
+              }}
+            />
+          </label>
+        </div>
       </label>
 
       <Field
@@ -254,22 +286,6 @@ function GameForm({
           </select>
         </label>
       </div>
-
-      <label className="grid gap-1">
-        <span
-          className="text-xs font-medium"
-          style={{ color: C.textSecondary }}
-        >
-          Description
-        </span>
-        <textarea
-          name="description"
-          rows={3}
-          defaultValue={game?.description ?? ""}
-          className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
-          style={{ borderColor: C.cardBorder, color: C.textPrimary }}
-        />
-      </label>
 
       <div className="flex justify-end gap-2 pt-2">
         <button
