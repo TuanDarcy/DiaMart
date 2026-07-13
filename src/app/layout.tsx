@@ -14,10 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Script
-          src="/security.js"
-          strategy="beforeInteractive"
-        />
+        <Script src="/security.js" strategy="beforeInteractive" />
         {children}
       </body>
     </html>

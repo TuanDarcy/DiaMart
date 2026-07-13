@@ -144,77 +144,52 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b border-purple-400/20 bg-[rgba(7,7,10,0.9)] backdrop-blur-xl">
-      <div className="container-shell flex min-h-16 items-center justify-between gap-4 py-3">
-        <Link
-          className="flex items-center gap-3"
-          href="/"
-          aria-label="DiaMart home"
-        >
-          <span className="font-brand flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-300/35 bg-purple-500/12 text-sm font-bold text-cyan-100">
-            DM
-          </span>
-          <span className="font-brand text-lg font-semibold tracking-normal text-white">
-            DiaMart
-          </span>
-        </Link>
-
-        <nav
-          className="hidden items-center gap-1 md:flex"
-          aria-label="Main navigation"
-        >
-          {navLinks.map((link) => (
-            <a
-              className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-purple-500/10 hover:text-white"
-              href={link.href}
-              key={link.href}
-            >
-              {link.label}
-              {"live" in link && link.live ? (
-                <span className="font-strong ml-2 inline-flex items-center gap-1 rounded-full bg-[#14f1c9] px-2 py-0.5 text-[10px] uppercase text-slate-950">
-                  <span className="live-pulse h-1.5 w-1.5 rounded-full bg-slate-950" />{" "}
-                  live
-                </span>
-              ) : null}
-            </a>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <button
-            className="btn-secondary relative min-h-10 px-4"
-            type="button"
-            onClick={onCartClick}
-            aria-label={`Open cart with ${cartItemCount} items`}
+    <>
+      <header className="sticky top-0 z-30 border-b border-purple-400/20 bg-[rgba(7,7,10,0.9)] backdrop-blur-xl">
+        <div className="container-shell flex min-h-16 items-center justify-between gap-4 py-3">
+          <Link
+            className="flex items-center gap-3"
+            href="/"
+            aria-label="DiaMart home"
           >
-            <svg
-              className="icon-md mr-1.5"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="9" cy="21" r="1" />
-              <circle cx="20" cy="21" r="1" />
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-            </svg>
-            Cart
-            {cartItemCount > 0 ? (
-              <span className="font-strong ml-2 rounded-full bg-[#14f1c9] px-2 py-0.5 text-xs font-semibold text-slate-950">
-                {cartItemCount}
-              </span>
-            ) : null}
-          </button>
-          {!isLoadingSession && displayName && isAdmin ? (
-            <Link
-              className="btn-secondary hidden min-h-10 px-3 md:inline-flex"
-              href="/admin"
+            <span className="font-brand flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-300/35 bg-purple-500/12 text-sm font-bold text-cyan-100">
+              DM
+            </span>
+            <span className="font-brand text-lg font-semibold tracking-normal text-white">
+              DiaMart
+            </span>
+          </Link>
+
+          <nav
+            className="hidden items-center gap-1 md:flex"
+            aria-label="Main navigation"
+          >
+            {navLinks.map((link) => (
+              <a
+                className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-purple-500/10 hover:text-white"
+                href={link.href}
+                key={link.href}
+              >
+                {link.label}
+                {"live" in link && link.live ? (
+                  <span className="font-strong ml-2 inline-flex items-center gap-1 rounded-full bg-[#14f1c9] px-2 py-0.5 text-[10px] uppercase text-slate-950">
+                    <span className="live-pulse h-1.5 w-1.5 rounded-full bg-slate-950" />{" "}
+                    live
+                  </span>
+                ) : null}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <button
+              className="btn-secondary relative min-h-10 px-4"
+              type="button"
+              onClick={onCartClick}
+              aria-label={`Open cart with ${cartItemCount} items`}
             >
               <svg
-                className="icon-sm mr-1.5"
+                className="icon-md mr-1.5"
                 aria-hidden="true"
                 viewBox="0 0 24 24"
                 fill="none"
@@ -223,122 +198,222 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <circle cx="12" cy="12" r="3" />
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
               </svg>
-              Admin
+              Cart
+              {cartItemCount > 0 ? (
+                <span className="font-strong ml-2 rounded-full bg-[#14f1c9] px-2 py-0.5 text-xs font-semibold text-slate-950">
+                  {cartItemCount}
+                </span>
+              ) : null}
+            </button>
+            {!isLoadingSession && displayName && isAdmin ? (
+              <Link
+                className="btn-secondary hidden min-h-10 px-3 md:inline-flex"
+                href="/admin"
+              >
+                <svg
+                  className="icon-sm mr-1.5"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                Admin
+              </Link>
+            ) : null}
+            {!isLoadingSession && displayName ? (
+              <div className="hidden items-center gap-2 md:flex">
+                <div className="rounded-[12px] border border-cyan-300/30 bg-cyan-400/8 px-3 py-1.5 text-right">
+                  <p className="flex items-center justify-end gap-1.5 text-xs text-cyan-100">
+                    <svg
+                      className="icon-sm"
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <span className="font-semibold">{displayName}</span>
+                  </p>
+                  <p className="font-strong text-sm text-[#14f1c9]">
+                    {displayBalance}
+                  </p>
+                </div>
+                <button
+                  className="btn-secondary min-h-10 px-3"
+                  type="button"
+                  onClick={signOut}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                className="btn-secondary hidden min-h-10 px-4 md:flex"
+                href="/login"
+              >
+                Login
+              </Link>
+            )}
+            <button
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-purple-500/8 text-slate-300 transition hover:border-cyan-300/35 hover:text-white md:hidden"
+              type="button"
+              aria-expanded={isMobileNavOpen}
+              aria-controls="mobile-navigation"
+              onClick={() => setIsMobileNavOpen((value) => !value)}
+              aria-label="Toggle navigation menu"
+            >
+              <svg
+                className="icon-md icon-wrap"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                {isMobileNavOpen ? (
+                  <>
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </>
+                ) : (
+                  <>
+                    <line x1="4" y1="6" x2="20" y2="6" />
+                    <line x1="4" y1="12" x2="20" y2="12" />
+                    <line x1="4" y1="18" x2="20" y2="18" />
+                  </>
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {isMobileNavOpen ? (
+          <nav
+            className="container-shell grid gap-2 border-t border-purple-400/20 pb-4 md:hidden"
+            id="mobile-navigation"
+            aria-label="Mobile navigation"
+          >
+            {navLinks.map((link) => (
+              <a
+                className="rounded-[14px] border border-purple-400/20 bg-purple-500/8 px-4 py-3 text-sm font-medium text-slate-200"
+                href={link.href}
+                key={link.href}
+                onClick={() => setIsMobileNavOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+            <Link
+              className="rounded-[14px] border border-purple-400/20 bg-purple-500/8 px-4 py-3 text-sm font-medium text-slate-200"
+              href={displayName ? "/" : "/login"}
+              onClick={() => setIsMobileNavOpen(false)}
+            >
+              {displayName ? `Signed in: ${displayName}` : "Login"}
             </Link>
-          ) : null}
-          {!isLoadingSession && displayName ? (
-            <div className="hidden items-center gap-2 md:flex">
-              <div className="rounded-[12px] border border-cyan-300/30 bg-cyan-400/8 px-3 py-1.5 text-right">
-                <p className="flex items-center justify-end gap-1.5 text-xs text-cyan-100">
+            {displayName ? (
+              <button
+                className="rounded-[14px] border border-purple-400/20 bg-purple-500/8 px-4 py-3 text-left text-sm font-medium text-slate-200"
+                type="button"
+                onClick={() => {
+                  setIsMobileNavOpen(false);
+                  void signOut();
+                }}
+              >
+                Logout
+              </button>
+            ) : null}
+          </nav>
+        ) : null}
+
+        {showDiscordPopup ? (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="discord-popup-title"
+          >
+            <div className="entrance-rise surface-panel-strong w-full max-w-md rounded-[24px] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-strong text-xs uppercase tracking-[0.2em] text-fuchsia-300">
+                    Account connected
+                  </p>
+                  <h2
+                    className="font-heading mt-2 text-xl font-semibold text-white"
+                    id="discord-popup-title"
+                  >
+                    Link your Discord account
+                  </h2>
+                </div>
+                <button
+                  className="btn-icon"
+                  type="button"
+                  onClick={() => setDismissDiscordPopup(true)}
+                  aria-label="Close popup"
+                >
                   <svg
-                    className="icon-sm"
+                    className="icon-md icon-wrap"
                     aria-hidden="true"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
                     strokeLinecap="round"
-                    strokeLinejoin="round"
                   >
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
-                  <span className="font-semibold">{displayName}</span>
-                </p>
-                <p className="font-strong text-sm text-[#14f1c9]">
-                  {displayBalance}
-                </p>
+                </button>
               </div>
-              <button
-                className="btn-secondary min-h-10 px-3"
-                type="button"
-                onClick={signOut}
-              >
-                Logout
-              </button>
+              <p className="mt-4 text-sm leading-6 text-slate-300">
+                {discordLinked
+                  ? "Your Discord account is linked to your shop account. After checkout, our bot can create a ticket, invite you to the support server, and tag your Discord profile automatically."
+                  : "Login completed. Link your Discord account to sync web orders with our support bot and automatic ticket routing."}
+              </p>
+              <div className="mt-5 flex items-center gap-3">
+                <button
+                  className="btn-primary min-h-11 flex-1"
+                  type="button"
+                  onClick={() => setDismissDiscordPopup(true)}
+                >
+                  {discordLinked ? "Got it" : "Connect Discord"}
+                </button>
+                <button
+                  className="btn-secondary min-h-11 flex-1"
+                  type="button"
+                  onClick={() => {
+                    // Don't show for 24h
+                    try {
+                      localStorage.setItem("diamart_discord_dismiss", "1");
+                    } catch {
+                      /* noop */
+                    }
+                    setDismissDiscordPopup(true);
+                  }}
+                >
+                  Don&apos;t show for 24h
+                </button>
+              </div>
             </div>
-          ) : (
-            <Link
-              className="btn-secondary hidden min-h-10 px-4 md:flex"
-              href="/login"
-            >
-              Login
-            </Link>
-          )}
-          <button
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-purple-500/8 text-slate-300 transition hover:border-cyan-300/35 hover:text-white md:hidden"
-            type="button"
-            aria-expanded={isMobileNavOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setIsMobileNavOpen((value) => !value)}
-            aria-label="Toggle navigation menu"
-          >
-            <svg
-              className="icon-md icon-wrap"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            >
-              {isMobileNavOpen ? (
-                <>
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </>
-              ) : (
-                <>
-                  <line x1="4" y1="6" x2="20" y2="6" />
-                  <line x1="4" y1="12" x2="20" y2="12" />
-                  <line x1="4" y1="18" x2="20" y2="18" />
-                </>
-              )}
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {isMobileNavOpen ? (
-        <nav
-          className="container-shell grid gap-2 border-t border-purple-400/20 pb-4 md:hidden"
-          id="mobile-navigation"
-          aria-label="Mobile navigation"
-        >
-          {navLinks.map((link) => (
-            <a
-              className="rounded-[14px] border border-purple-400/20 bg-purple-500/8 px-4 py-3 text-sm font-medium text-slate-200"
-              href={link.href}
-              key={link.href}
-              onClick={() => setIsMobileNavOpen(false)}
-            >
-              {link.label}
-            </a>
-          ))}
-          <Link
-            className="rounded-[14px] border border-purple-400/20 bg-purple-500/8 px-4 py-3 text-sm font-medium text-slate-200"
-            href={displayName ? "/" : "/login"}
-            onClick={() => setIsMobileNavOpen(false)}
-          >
-            {displayName ? `Signed in: ${displayName}` : "Login"}
-          </Link>
-          {displayName ? (
-            <button
-              className="rounded-[14px] border border-purple-400/20 bg-purple-500/8 px-4 py-3 text-left text-sm font-medium text-slate-200"
-              type="button"
-              onClick={() => {
-                setIsMobileNavOpen(false);
-                void signOut();
-              }}
-            >
-              Logout
-            </button>
-          ) : null}
-        </nav>
-      ) : null}
+          </div>
+        ) : null}
+      </header>
 
       {showDiscordPopup ? (
         <div
@@ -366,7 +441,15 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
                 onClick={() => setDismissDiscordPopup(true)}
                 aria-label="Close popup"
               >
-                <svg className="icon-md icon-wrap" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <svg
+                  className="icon-md icon-wrap"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                >
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
@@ -389,7 +472,6 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
                 className="btn-secondary min-h-11 flex-1"
                 type="button"
                 onClick={() => {
-                  // Don't show for 24h
                   try {
                     localStorage.setItem("diamart_discord_dismiss", "1");
                   } catch {
@@ -404,6 +486,6 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
           </div>
         </div>
       ) : null}
-    </header>
+    </>
   );
 }

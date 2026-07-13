@@ -3,23 +3,33 @@
   "use strict";
 
   // ── Keyboard shortcuts ──
-  document.addEventListener("keydown", function (e) {
-    if (
-      e.key === "F12" ||
-      (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) ||
-      (e.ctrlKey && e.key === "U")
-    ) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
-  }, true);
+  document.addEventListener(
+    "keydown",
+    function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey &&
+          e.shiftKey &&
+          (e.key === "I" || e.key === "J" || e.key === "C")) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    },
+    true,
+  );
 
   // ── Right-click ──
-  document.addEventListener("contextmenu", function (e) {
-    e.preventDefault();
-    return false;
-  }, true);
+  document.addEventListener(
+    "contextmenu",
+    function (e) {
+      e.preventDefault();
+      return false;
+    },
+    true,
+  );
 
   // ── Devtools dimension detection ──
   var threshold = 160;
