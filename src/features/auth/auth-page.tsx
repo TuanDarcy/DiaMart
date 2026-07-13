@@ -15,7 +15,7 @@ function resolveMessage(status?: string, code?: string) {
   const messages: Record<string, string> = {
     auth_required: "Please login first.",
     not_admin:
-      "Your account is signed in, but it does not have admin permission.",
+      "Access denied. This account does not have admin permission. The admin panel is restricted to authorized staff only.",
     logout_success: "You have been signed out.",
     missing_credentials: "Please enter your email and password.",
     invalid_credentials: "Invalid email or password.",
