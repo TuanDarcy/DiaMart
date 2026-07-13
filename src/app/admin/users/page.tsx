@@ -18,7 +18,7 @@ export default async function AdminUsersPage() {
           <p><span className="font-medium" style={{ color: "#0f172a" }}>ID:</span> {session.userId}</p>
         </div>
         <p className="mt-4 text-xs" style={{ color: "#64748b" }}>
-          User activity tracking — coming soon. This will show registered users, order history, and login activity.
+          User activity tracking - coming soon. This will show registered users, order history, and login activity.
         </p>
       </div>
     </main>
