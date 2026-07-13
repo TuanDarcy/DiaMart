@@ -82,6 +82,25 @@ export type AdminDashboardData = {
 
 export async function getAdminDashboardData(): Promise<AdminDashboardData> {
   const supabase = await createClient();
+  if (!supabase) {
+    return {
+      games: [],
+      categories: [],
+      products: [],
+      faqs: [],
+      supportTopics: [],
+      summary: {
+        totalGames: 0,
+        totalCategories: 0,
+        totalProducts: 0,
+        activeProducts: 0,
+        inactiveProducts: 0,
+        totalFaqs: 0,
+        totalSupportTopics: 0,
+      },
+    };
+  }
+
   const [
     gamesResult,
     categoriesResult,

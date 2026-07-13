@@ -47,6 +47,11 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
       }
 
       const supabase = createClient();
+      if (!supabase) {
+        setIsLoadingSession(false);
+        return;
+      }
+
       const { data } = await supabase.auth.getUser();
       const user = data.user;
 
@@ -129,6 +134,11 @@ export function SiteHeader({ cartItemCount, onCartClick }: SiteHeaderProps) {
     }
 
     const supabase = createClient();
+    if (!supabase) {
+      window.location.href = "/";
+      return;
+    }
+
     await supabase.auth.signOut();
     window.location.href = "/";
   }

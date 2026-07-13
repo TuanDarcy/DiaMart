@@ -25,6 +25,10 @@ export async function loginAction(formData: FormData) {
   }
 
   const supabase = await createClient();
+  if (!supabase) {
+    redirectToLoginError("auth_unavailable");
+  }
+
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
@@ -60,6 +64,10 @@ export async function registerAction(formData: FormData) {
   }
 
   const supabase = await createClient();
+  if (!supabase) {
+    redirectToRegisterError("auth_unavailable");
+  }
+
   const { error } = await supabase.auth.signUp({
     email,
     password,

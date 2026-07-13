@@ -17,6 +17,10 @@ export type AdminSession = {
 
 async function getAdminUserRow(userId: string): Promise<AdminUserRow | null> {
   const supabase = await createClient();
+  if (!supabase) {
+    return null;
+  }
+
   const { data, error } = await supabase
     .from("admin_users")
     .select("user_id, role, is_active")
@@ -38,6 +42,10 @@ async function getAdminUserRow(userId: string): Promise<AdminUserRow | null> {
 
 export async function requireAdminSession(): Promise<AdminSession> {
   const supabase = await createClient();
+  if (!supabase) {
+    redirect("/login?status=error&code=auth_required");
+  }
+
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {
@@ -67,6 +75,10 @@ export async function requireAdminSession(): Promise<AdminSession> {
 
 export async function getCurrentAdminSession(): Promise<AdminSession | null> {
   const supabase = await createClient();
+  if (!supabase) {
+    return null;
+  }
+
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {

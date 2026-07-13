@@ -25,6 +25,8 @@ function resolveMessage(status?: string, code?: string) {
     register_failed: "Could not create account. Please try again.",
     register_success:
       "Account created. You can login now (or confirm email if required).",
+    auth_unavailable:
+      "Authentication is unavailable in preview mode. Configure Supabase in .env.local to enable login.",
   };
 
   return {
