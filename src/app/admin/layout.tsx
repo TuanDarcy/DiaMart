@@ -11,9 +11,7 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#f8fafc" }}>
       <AdminSidebar session={session} />
-      <div className="pl-64">
-        {children}
-      </div>
+      <div className="pl-64">{children}</div>
     </div>
   );
 }

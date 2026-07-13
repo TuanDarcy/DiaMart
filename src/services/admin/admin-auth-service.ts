@@ -1,6 +1,7 @@
 import "server-only";
 
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 type AdminUserRow = {
@@ -15,7 +16,7 @@ export type AdminSession = {
   role: "admin" | "editor";
 };
 
-async function getAdminUserRow(userId: string): Promise<AdminUserRow | null> {
+const getAdminUserRow = cache(async (userId: string): Promise<AdminUserRow | null> => {
   const supabase = await createClient();
   if (!supabase) {
     return null;
@@ -38,9 +39,9 @@ async function getAdminUserRow(userId: string): Promise<AdminUserRow | null> {
   }
 
   return data as AdminUserRow;
-}
+});
 
-export async function requireAdminSession(): Promise<AdminSession> {
+export const requireAdminSession = cache(async (): Promise<AdminSession> => {
   const supabase = await createClient();
   if (!supabase) {
     redirect("/login?status=error&code=auth_required");
@@ -71,9 +72,9 @@ export async function requireAdminSession(): Promise<AdminSession> {
     email,
     role: adminRow.role,
   };
-}
+});
 
-export async function getCurrentAdminSession(): Promise<AdminSession | null> {
+export const getCurrentAdminSession = cache(async (): Promise<AdminSession | null> => {
   const supabase = await createClient();
   if (!supabase) {
     return null;
@@ -103,4 +104,4 @@ export async function getCurrentAdminSession(): Promise<AdminSession | null> {
     email,
     role: adminRow.role,
   };
-}
+});

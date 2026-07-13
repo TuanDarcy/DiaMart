@@ -47,17 +47,29 @@ function MetricCard({
   );
 }
 
-export function AdminDashboardPage({
-  data,
-}: {
-  data: AdminDashboardData;
-}) {
+export function AdminDashboardPage({ data }: { data: AdminDashboardData }) {
   const links = [
-    { href: "/admin/categories", label: "Categories", desc: `${data.categories.length} entries` },
-    { href: "/admin/games", label: "Games", desc: `${data.games.length} entries` },
-    { href: "/admin/products", label: "Products", desc: `${data.products.length} entries` },
+    {
+      href: "/admin/categories",
+      label: "Categories",
+      desc: `${data.categories.length} entries`,
+    },
+    {
+      href: "/admin/games",
+      label: "Games",
+      desc: `${data.games.length} entries`,
+    },
+    {
+      href: "/admin/products",
+      label: "Products",
+      desc: `${data.products.length} entries`,
+    },
     { href: "/admin/faqs", label: "FAQs", desc: `${data.faqs.length} entries` },
-    { href: "/admin/support-topics", label: "Support topics", desc: `${data.supportTopics.length} entries` },
+    {
+      href: "/admin/support-topics",
+      label: "Support topics",
+      desc: `${data.supportTopics.length} entries`,
+    },
     { href: "/admin/images", label: "Image tools", desc: "Upload images" },
   ];
 
@@ -79,12 +91,23 @@ export function AdminDashboardPage({
 
       {/* Metric cards */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <MetricCard label="Games" value={data.summary.totalGames} sublabel={`${data.games.length} entries`} />
+        <MetricCard
+          label="Games"
+          value={data.summary.totalGames}
+          sublabel={`${data.games.length} entries`}
+        />
         <MetricCard label="Categories" value={data.summary.totalCategories} />
-        <MetricCard label="Products" value={data.summary.totalProducts}
-          sublabel={`${data.summary.activeProducts} active, ${data.summary.inactiveProducts} inactive`} color={C.accent} />
-        <MetricCard label="Content" value={data.summary.totalFaqs + data.summary.totalSupportTopics}
-          sublabel={`${data.summary.totalFaqs} FAQs · ${data.summary.totalSupportTopics} topics`} />
+        <MetricCard
+          label="Products"
+          value={data.summary.totalProducts}
+          sublabel={`${data.summary.activeProducts} active, ${data.summary.inactiveProducts} inactive`}
+          color={C.accent}
+        />
+        <MetricCard
+          label="Content"
+          value={data.summary.totalFaqs + data.summary.totalSupportTopics}
+          sublabel={`${data.summary.totalFaqs} FAQs · ${data.summary.totalSupportTopics} topics`}
+        />
       </div>
 
       {/* Quick links to each section */}

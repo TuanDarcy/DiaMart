@@ -9,13 +9,19 @@ export function AdminImagesClient(_props: { session: unknown }) {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-xl font-bold" style={{ color: "#0f172a" }}>Image tools</h1>
+        <h1 className="text-xl font-bold" style={{ color: "#0f172a" }}>
+          Image tools
+        </h1>
         <p className="mt-1 text-sm" style={{ color: "#64748b" }}>
-          Upload images to Supabase Storage or paste a public URL directly into the image_src field.
+          Upload images to Supabase Storage or paste a public URL directly into
+          the image_src field.
         </p>
       </div>
 
-      <div className="rounded-xl border bg-white p-6" style={{ borderColor: "#e2e8f0" }}>
+      <div
+        className="rounded-xl border bg-white p-6"
+        style={{ borderColor: "#e2e8f0" }}
+      >
         <form
           action={uploadStorefrontImageAction}
           onSubmit={() => setTimeout(() => location.reload(), 500)}
@@ -39,9 +45,16 @@ export function AdminImagesClient(_props: { session: unknown }) {
         </form>
 
         {uploadedUrl ? (
-          <div className="mt-3 rounded-lg border p-3 text-sm" style={{ borderColor: "#e2e8f0", backgroundColor: "#eff6ff" }}>
-            <p className="font-semibold" style={{ color: "#0f172a" }}>Uploaded URL</p>
-            <p className="mt-1 break-all" style={{ color: "#3b82f6" }}>{uploadedUrl}</p>
+          <div
+            className="mt-3 rounded-lg border p-3 text-sm"
+            style={{ borderColor: "#e2e8f0", backgroundColor: "#eff6ff" }}
+          >
+            <p className="font-semibold" style={{ color: "#0f172a" }}>
+              Uploaded URL
+            </p>
+            <p className="mt-1 break-all" style={{ color: "#3b82f6" }}>
+              {uploadedUrl}
+            </p>
           </div>
         ) : null}
       </div>

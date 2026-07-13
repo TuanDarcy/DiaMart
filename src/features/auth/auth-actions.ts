@@ -3,6 +3,10 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+const canUseSupabase =
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
 function getString(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
@@ -22,6 +26,10 @@ export async function loginAction(formData: FormData) {
 
   if (!email || !password) {
     redirectToLoginError("missing_credentials");
+  }
+
+  if (!canUseSupabase) {
+    redirectToLoginError("auth_unavailable");
   }
 
   const supabase = await createClient();
@@ -61,6 +69,10 @@ export async function registerAction(formData: FormData) {
 
   if (password.length < 6) {
     redirectToRegisterError("weak_password");
+  }
+
+  if (!canUseSupabase) {
+    redirectToRegisterError("auth_unavailable");
   }
 
   const supabase = await createClient();

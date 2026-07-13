@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 export type AdminGame = {
@@ -80,17 +81,19 @@ export type AdminDashboardData = {
   };
 };
 
-export async function getAdminGames(): Promise<AdminGame[]> {
+export const getAdminGames = cache(async (): Promise<AdminGame[]> => {
   const supabase = await createClient();
   if (!supabase) return [];
   const { data } = await supabase
     .from("storefront_games")
-    .select("id, slug, name, tagline, description, image_src, image_alt, is_active, sort_order")
+    .select(
+      "id, slug, name, tagline, description, image_src, image_alt, is_active, sort_order",
+    )
     .order("sort_order", { ascending: true });
   return (data ?? []) as AdminGame[];
-}
+});
 
-export async function getAdminCategories(): Promise<AdminCategory[]> {
+export const getAdminCategories = cache(async (): Promise<AdminCategory[]> => {
   const supabase = await createClient();
   if (!supabase) return [];
   const { data } = await supabase
@@ -98,19 +101,21 @@ export async function getAdminCategories(): Promise<AdminCategory[]> {
     .select("id, label, description, is_active, sort_order")
     .order("sort_order", { ascending: true });
   return (data ?? []) as AdminCategory[];
-}
+});
 
-export async function getAdminProducts(): Promise<AdminProduct[]> {
+export const getAdminProducts = cache(async (): Promise<AdminProduct[]> => {
   const supabase = await createClient();
   if (!supabase) return [];
   const { data } = await supabase
     .from("storefront_products")
-    .select("id, slug, name, game_id, category_id, image_src, image_alt, price_usd, original_price_usd, stock_status, stock_quantity, delivery_speed, badge, featured, popular, trending, best_seller, description, is_active, sort_order")
+    .select(
+      "id, slug, name, game_id, category_id, image_src, image_alt, price_usd, original_price_usd, stock_status, stock_quantity, delivery_speed, badge, featured, popular, trending, best_seller, description, is_active, sort_order",
+    )
     .order("sort_order", { ascending: true });
   return (data ?? []) as AdminProduct[];
-}
+});
 
-export async function getAdminFaqs(): Promise<AdminFaq[]> {
+export const getAdminFaqs = cache(async (): Promise<AdminFaq[]> => {
   const supabase = await createClient();
   if (!supabase) return [];
   const { data } = await supabase
@@ -118,9 +123,9 @@ export async function getAdminFaqs(): Promise<AdminFaq[]> {
     .select("id, question, answer, is_active, sort_order")
     .order("sort_order", { ascending: true });
   return (data ?? []) as AdminFaq[];
-}
+});
 
-export async function getAdminSupportTopics(): Promise<AdminSupportTopic[]> {
+export const getAdminSupportTopics = cache(async (): Promise<AdminSupportTopic[]> => {
   const supabase = await createClient();
   if (!supabase) return [];
   const { data } = await supabase
@@ -128,9 +133,9 @@ export async function getAdminSupportTopics(): Promise<AdminSupportTopic[]> {
     .select("id, label, description, response, is_active, sort_order")
     .order("sort_order", { ascending: true });
   return (data ?? []) as AdminSupportTopic[];
-}
+});
 
-export async function getAdminDashboardData(): Promise<AdminDashboardData> {
+export const getAdminDashboardData = cache(async (): Promise<AdminDashboardData> => {
   const supabase = await createClient();
   if (!supabase) {
     return {
@@ -226,4 +231,4 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       totalSupportTopics: supportTopics.length,
     },
   };
-}
+});

@@ -4,7 +4,5 @@ import { getAdminDashboardData } from "@/services/admin/admin-dashboard-service"
 export default async function AdminDashboardRoute() {
   const data = await getAdminDashboardData();
 
-  return (
-    <AdminDashboardPage data={data} />
-  );
+  return <AdminDashboardPage data={data} />;
 }
