@@ -124,7 +124,7 @@ export function DeliveryProofPopup() {
         className="absolute bottom-0 left-0 h-0.5 w-full bg-fuchsia-950/70"
         aria-hidden="true"
       >
-        <div className="proof-progress h-full w-full bg-gradient-to-r from-[var(--primary)] via-[var(--magenta)] to-[var(--mint)]" />
+        <div className="proof-progress h-full w-full bg-gradient-to-r from-[var(--primary)] to-[var(--magenta)]" />
       </div>
     </aside>
   );

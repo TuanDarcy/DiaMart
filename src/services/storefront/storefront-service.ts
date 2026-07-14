@@ -153,6 +153,9 @@ function buildFallbackSnapshot(): StorefrontSnapshot {
 
 async function fetchSnapshotFromDatabase(): Promise<StorefrontSnapshot> {
   const supabase = await createClient();
+  if (!supabase) {
+    return buildFallbackSnapshot();
+  }
 
   const [
     gamesResult,

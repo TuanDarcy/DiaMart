@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 export type AdminGame = {
@@ -80,81 +81,159 @@ export type AdminDashboardData = {
   };
 };
 
-export async function getAdminDashboardData(): Promise<AdminDashboardData> {
+export const getAdminGames = cache(async (): Promise<AdminGame[]> => {
   const supabase = await createClient();
-  const [
-    gamesResult,
-    categoriesResult,
-    productsResult,
-    faqsResult,
-    supportResult,
-  ] = await Promise.all([
-    supabase
-      .from("storefront_games")
-      .select(
-        "id, slug, name, tagline, description, image_src, image_alt, is_active, sort_order",
-      )
-      .order("sort_order", { ascending: true }),
-    supabase
-      .from("storefront_categories")
-      .select("id, label, description, is_active, sort_order")
-      .order("sort_order", { ascending: true }),
-    supabase
-      .from("storefront_products")
-      .select(
-        "id, slug, name, game_id, category_id, image_src, image_alt, price_usd, original_price_usd, stock_status, stock_quantity, delivery_speed, badge, featured, popular, trending, best_seller, description, is_active, sort_order",
-      )
-      .order("sort_order", { ascending: true }),
-    supabase
-      .from("storefront_faqs")
-      .select("id, question, answer, is_active, sort_order")
-      .order("sort_order", { ascending: true }),
-    supabase
+  if (!supabase) return [];
+  const { data } = await supabase
+    .from("storefront_games")
+    .select(
+      "id, slug, name, tagline, description, image_src, image_alt, is_active, sort_order",
+    )
+    .order("sort_order", { ascending: true });
+  return (data ?? []) as AdminGame[];
+});
+
+export const getAdminCategories = cache(async (): Promise<AdminCategory[]> => {
+  const supabase = await createClient();
+  if (!supabase) return [];
+  const { data } = await supabase
+    .from("storefront_categories")
+    .select("id, label, description, is_active, sort_order")
+    .order("sort_order", { ascending: true });
+  return (data ?? []) as AdminCategory[];
+});
+
+export const getAdminProducts = cache(async (): Promise<AdminProduct[]> => {
+  const supabase = await createClient();
+  if (!supabase) return [];
+  const { data } = await supabase
+    .from("storefront_products")
+    .select(
+      "id, slug, name, game_id, category_id, image_src, image_alt, price_usd, original_price_usd, stock_status, stock_quantity, delivery_speed, badge, featured, popular, trending, best_seller, description, is_active, sort_order",
+    )
+    .order("sort_order", { ascending: true });
+  return (data ?? []) as AdminProduct[];
+});
+
+export const getAdminFaqs = cache(async (): Promise<AdminFaq[]> => {
+  const supabase = await createClient();
+  if (!supabase) return [];
+  const { data } = await supabase
+    .from("storefront_faqs")
+    .select("id, question, answer, is_active, sort_order")
+    .order("sort_order", { ascending: true });
+  return (data ?? []) as AdminFaq[];
+});
+
+export const getAdminSupportTopics = cache(
+  async (): Promise<AdminSupportTopic[]> => {
+    const supabase = await createClient();
+    if (!supabase) return [];
+    const { data } = await supabase
       .from("storefront_support_topics")
       .select("id, label, description, response, is_active, sort_order")
-      .order("sort_order", { ascending: true }),
-  ]);
+      .order("sort_order", { ascending: true });
+    return (data ?? []) as AdminSupportTopic[];
+  },
+);
 
-  const errors = [
-    gamesResult.error,
-    categoriesResult.error,
-    productsResult.error,
-    faqsResult.error,
-    supportResult.error,
-  ].filter(Boolean);
+export const getAdminDashboardData = cache(
+  async (): Promise<AdminDashboardData> => {
+    const supabase = await createClient();
+    if (!supabase) {
+      return {
+        games: [],
+        categories: [],
+        products: [],
+        faqs: [],
+        supportTopics: [],
+        summary: {
+          totalGames: 0,
+          totalCategories: 0,
+          totalProducts: 0,
+          activeProducts: 0,
+          inactiveProducts: 0,
+          totalFaqs: 0,
+          totalSupportTopics: 0,
+        },
+      };
+    }
 
-  const loadError =
-    errors.length > 0
-      ? `Admin data query error: ${errors
-          .map((error) => (error ? error.message : "unknown"))
-          .join(" | ")}`
-      : undefined;
+    const [
+      gamesResult,
+      categoriesResult,
+      productsResult,
+      faqsResult,
+      supportResult,
+    ] = await Promise.all([
+      supabase
+        .from("storefront_games")
+        .select(
+          "id, slug, name, tagline, description, image_src, image_alt, is_active, sort_order",
+        )
+        .order("sort_order", { ascending: true }),
+      supabase
+        .from("storefront_categories")
+        .select("id, label, description, is_active, sort_order")
+        .order("sort_order", { ascending: true }),
+      supabase
+        .from("storefront_products")
+        .select(
+          "id, slug, name, game_id, category_id, image_src, image_alt, price_usd, original_price_usd, stock_status, stock_quantity, delivery_speed, badge, featured, popular, trending, best_seller, description, is_active, sort_order",
+        )
+        .order("sort_order", { ascending: true }),
+      supabase
+        .from("storefront_faqs")
+        .select("id, question, answer, is_active, sort_order")
+        .order("sort_order", { ascending: true }),
+      supabase
+        .from("storefront_support_topics")
+        .select("id, label, description, response, is_active, sort_order")
+        .order("sort_order", { ascending: true }),
+    ]);
 
-  if (loadError) {
-    console.error("[admin-dashboard-service]", loadError);
-  }
+    const errors = [
+      gamesResult.error,
+      categoriesResult.error,
+      productsResult.error,
+      faqsResult.error,
+      supportResult.error,
+    ].filter(Boolean);
 
-  const games = (gamesResult.data ?? []) as AdminGame[];
-  const categories = (categoriesResult.data ?? []) as AdminCategory[];
-  const products = (productsResult.data ?? []) as AdminProduct[];
-  const faqs = (faqsResult.data ?? []) as AdminFaq[];
-  const supportTopics = (supportResult.data ?? []) as AdminSupportTopic[];
+    const loadError =
+      errors.length > 0
+        ? `Admin data query error: ${errors
+            .map((error) => (error ? error.message : "unknown"))
+            .join(" | ")}`
+        : undefined;
 
-  return {
-    games,
-    categories,
-    products,
-    faqs,
-    supportTopics,
-    loadError,
-    summary: {
-      totalGames: games.length,
-      totalCategories: categories.length,
-      totalProducts: products.length,
-      activeProducts: products.filter((product) => product.is_active).length,
-      inactiveProducts: products.filter((product) => !product.is_active).length,
-      totalFaqs: faqs.length,
-      totalSupportTopics: supportTopics.length,
-    },
-  };
-}
+    if (loadError) {
+      console.error("[admin-dashboard-service]", loadError);
+    }
+
+    const games = (gamesResult.data ?? []) as AdminGame[];
+    const categories = (categoriesResult.data ?? []) as AdminCategory[];
+    const products = (productsResult.data ?? []) as AdminProduct[];
+    const faqs = (faqsResult.data ?? []) as AdminFaq[];
+    const supportTopics = (supportResult.data ?? []) as AdminSupportTopic[];
+
+    return {
+      games,
+      categories,
+      products,
+      faqs,
+      supportTopics,
+      loadError,
+      summary: {
+        totalGames: games.length,
+        totalCategories: categories.length,
+        totalProducts: products.length,
+        activeProducts: products.filter((product) => product.is_active).length,
+        inactiveProducts: products.filter((product) => !product.is_active)
+          .length,
+        totalFaqs: faqs.length,
+        totalSupportTopics: supportTopics.length,
+      },
+    };
+  },
+);

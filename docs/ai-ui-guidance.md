@@ -48,13 +48,14 @@ Use the following as the default UI direction for storefront work:
 
 ### Visual direction
 
-- Background: dark charcoal and black,
+- Background: very dark warm charcoal (`#08080F`),
 - Surfaces: elevated dark panels with controlled purple accent borders,
-- Primary action: purple-to-magenta gradient or strong purple emphasis,
+- Primary action: clean purple-to-magenta gradient for modern, premium feel,
+- Secondary accent: amber (`#F59E0B`) for warm highlights and trust signals,
 - Success: green only for true success states,
 - Warning: amber for preview or limited states,
 - Error: red only for real errors or unavailable actions,
-- Text: high-contrast with strong readability.
+- Text: high-contrast with strong readability (purple-white primary).
 
 ### Typography direction
 

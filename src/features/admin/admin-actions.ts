@@ -4,6 +4,14 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminSession } from "@/services/admin/admin-auth-service";
 
+async function getSupabase() {
+  const supabase = await createClient();
+  if (!supabase) {
+    redirect("/login?status=error&code=auth_required");
+  }
+  return supabase;
+}
+
 function getString(formData: FormData, key: string, fallback = "") {
   const value = formData.get(key);
   if (typeof value !== "string") {
@@ -87,7 +95,7 @@ export async function adminLoginAction(formData: FormData) {
     redirectWith("/login", "error", "Email and password are required.");
   }
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
@@ -127,7 +135,7 @@ export async function adminLoginAction(formData: FormData) {
 }
 
 export async function adminLogoutAction() {
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   await supabase.auth.signOut();
   redirect(
     `/login?status=success&code=${encodeURIComponent("logout_success")}`,
@@ -161,7 +169,7 @@ export async function upsertGameAction(formData: FormData) {
     updated_at: new Date().toISOString(),
   };
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_games")
     .upsert([payload] as never[], { onConflict: "id" });
@@ -181,7 +189,7 @@ export async function deleteGameAction(formData: FormData) {
     redirectWith("/admin", "error", "Missing game id for delete action.");
   }
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_games")
     .delete()
@@ -215,7 +223,7 @@ export async function upsertCategoryAction(formData: FormData) {
     updated_at: new Date().toISOString(),
   };
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_categories")
     .upsert([payload] as never[], { onConflict: "id" });
@@ -239,7 +247,7 @@ export async function deleteCategoryAction(formData: FormData) {
     redirectWith("/admin", "error", "Missing category id for delete action.");
   }
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_categories")
     .delete()
@@ -300,7 +308,7 @@ export async function upsertProductAction(formData: FormData) {
     updated_at: new Date().toISOString(),
   };
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_products")
     .upsert([payload] as never[], { onConflict: "id" });
@@ -320,7 +328,7 @@ export async function deleteProductAction(formData: FormData) {
     redirectWith("/admin", "error", "Missing product id for delete action.");
   }
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_products")
     .delete()
@@ -358,7 +366,7 @@ export async function upsertFaqAction(formData: FormData) {
     updated_at: new Date().toISOString(),
   };
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_faqs")
     .upsert([payload] as never[], { onConflict: "id" });
@@ -378,7 +386,7 @@ export async function deleteFaqAction(formData: FormData) {
     redirectWith("/admin", "error", "Missing FAQ id for delete action.");
   }
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_faqs")
     .delete()
@@ -413,7 +421,7 @@ export async function upsertSupportTopicAction(formData: FormData) {
     updated_at: new Date().toISOString(),
   };
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_support_topics")
     .upsert([payload] as never[], { onConflict: "id" });
@@ -441,7 +449,7 @@ export async function deleteSupportTopicAction(formData: FormData) {
     );
   }
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("storefront_support_topics")
     .delete()
@@ -480,7 +488,7 @@ export async function uploadStorefrontImageAction(formData: FormData) {
     redirectWith("/admin", "error", "Image file is empty.");
   }
 
-  const supabase = await createClient();
+  const supabase = await getSupabase();
   const safeName = sanitizeFilename(file.name || "image");
   const filePath = `catalog/${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}-${safeName}`;
 

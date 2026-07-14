@@ -15,7 +15,7 @@ function resolveMessage(status?: string, code?: string) {
   const messages: Record<string, string> = {
     auth_required: "Please login first.",
     not_admin:
-      "Your account is signed in, but it does not have admin permission.",
+      "Access denied. This account does not have admin permission. The admin panel is restricted to authorized staff only.",
     logout_success: "You have been signed out.",
     missing_credentials: "Please enter your email and password.",
     invalid_credentials: "Invalid email or password.",
@@ -25,6 +25,8 @@ function resolveMessage(status?: string, code?: string) {
     register_failed: "Could not create account. Please try again.",
     register_success:
       "Account created. You can login now (or confirm email if required).",
+    auth_unavailable:
+      "Authentication is unavailable in preview mode. Configure Supabase in .env.local to enable login.",
   };
 
   return {

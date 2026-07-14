@@ -1,6 +1,7 @@
 import "server-only";
 
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 type AdminUserRow = {
@@ -15,29 +16,39 @@ export type AdminSession = {
   role: "admin" | "editor";
 };
 
-async function getAdminUserRow(userId: string): Promise<AdminUserRow | null> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("admin_users")
-    .select("user_id, role, is_active")
-    .eq("user_id", userId)
-    .eq("is_active", true)
-    .maybeSingle();
+const getAdminUserRow = cache(
+  async (userId: string): Promise<AdminUserRow | null> => {
+    const supabase = await createClient();
+    if (!supabase) {
+      return null;
+    }
 
-  if (error) {
-    console.error("[admin-auth-service] Failed to query admin_users", error);
-    return null;
+    const { data, error } = await supabase
+      .from("admin_users")
+      .select("user_id, role, is_active")
+      .eq("user_id", userId)
+      .eq("is_active", true)
+      .maybeSingle();
+
+    if (error) {
+      console.error("[admin-auth-service] Failed to query admin_users", error);
+      return null;
+    }
+
+    if (!data) {
+      return null;
+    }
+
+    return data as AdminUserRow;
+  },
+);
+
+export const requireAdminSession = cache(async (): Promise<AdminSession> => {
+  const supabase = await createClient();
+  if (!supabase) {
+    redirect("/login?status=error&code=auth_required");
   }
 
-  if (!data) {
-    return null;
-  }
-
-  return data as AdminUserRow;
-}
-
-export async function requireAdminSession(): Promise<AdminSession> {
-  const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {
@@ -63,32 +74,38 @@ export async function requireAdminSession(): Promise<AdminSession> {
     email,
     role: adminRow.role,
   };
-}
+});
 
-export async function getCurrentAdminSession(): Promise<AdminSession | null> {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getUser();
+export const getCurrentAdminSession = cache(
+  async (): Promise<AdminSession | null> => {
+    const supabase = await createClient();
+    if (!supabase) {
+      return null;
+    }
 
-  if (error || !data.user) {
-    return null;
-  }
+    const { data, error } = await supabase.auth.getUser();
 
-  const user = data.user;
-  const email = user.email ?? "";
+    if (error || !data.user) {
+      return null;
+    }
 
-  if (!email) {
-    return null;
-  }
+    const user = data.user;
+    const email = user.email ?? "";
 
-  const adminRow = await getAdminUserRow(user.id);
+    if (!email) {
+      return null;
+    }
 
-  if (!adminRow) {
-    return null;
-  }
+    const adminRow = await getAdminUserRow(user.id);
 
-  return {
-    userId: user.id,
-    email,
-    role: adminRow.role,
-  };
-}
+    if (!adminRow) {
+      return null;
+    }
+
+    return {
+      userId: user.id,
+      email,
+      role: adminRow.role,
+    };
+  },
+);
